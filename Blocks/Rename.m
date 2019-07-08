@@ -1,6 +1,6 @@
 %% 脚本路径 
-Filepath = 'D:\Codes\MatlabFiles\Blocks';
-cd(Filepath)
+% Filepath = 'D:\Codes\MatlabFiles\Blocks';
+% cd(Filepath)
 
 %%
 clc;
@@ -35,3 +35,6 @@ for i=3:1:length(detail)
         status = dos(command)
     end
 end
+
+%% 编译生成exe文件
+mcc -m Rename
