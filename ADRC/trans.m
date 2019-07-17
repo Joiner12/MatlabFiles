@@ -1,9 +1,9 @@
 %{
-安排过渡过程函数
-trans(T0,t) =   {1/2(1+sin(pi*(t/T0 - 1/2))) ,t<T0
-                {1                           ,T>t0
+    安排过渡过程函数
+    trans(T0,t) =   {1/2(1+sin(pi*(t/T0 - 1/2))) ,t<T0
+                    {1                           ,T>t0
 
-T0：过渡周期
+    T0：过渡周期
 %}
 function [] = trans(T0,figureflag,Amp)
     
