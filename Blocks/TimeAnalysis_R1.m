@@ -110,16 +110,18 @@ clear rep structSizeTemp startTimeTemp interTemp timetemp
 % 事件信息构造完成
 
 %--------------统计分析--------------%
+
+%--------------统计总时间-------------%
 %{
     1.事项 -> 事项详情
     2.数据存储类型
 %}
 anlysis_1 = true;
-
 if anlysis_1
     periods = zeros(0);
     pie_labels = string(0);
     len_temp = size(valid_struct);
+
     for i = linspace(1,len_temp(1),len_temp(1))
         periods(i) = valid_struct(i).interval;
         pie_labels(i) = string(valid_struct(i).item);
@@ -143,6 +145,17 @@ if anlysis_1
     pie(pie_temp,explode,pie_labels);
     grid on
     
-    clear explode i len_temp periods pie_labels pie_temp anlysis_1
-
 end
+
+%--------------事项统计-------------%
+things = strings(0);
+anlysis_items = true;
+if anlysis_items
+    for i = linspace(1,len_temp(1),len_temp(1))
+        periods_temp = valid_struct(i).interval;
+        thing_temp = string(valid_struct(i).item);
+        contains()
+        things(i) = "";
+    end
+end
+clear explode i len_temp periods pie_labels pie_temp anlysis_1
