@@ -1,4 +1,4 @@
-%% 时间分析
+%% ??????
 ScirptPath = 'D:\Codes\MatlabFiles\Blocks';
 if ~isequal(pwd,ScirptPath)
     cd(ScirptPath);
@@ -7,11 +7,11 @@ fprintf("load path:%s\n",pwd);
 
 %%
 %{
-    设计思路:
-    1.导入时间分析表，并对时间做统计；
-    2.时间统计属性包括：上、下午，事项对应时间长短，具体事项时间花费，
-    事项类型统计；
-    3.生成统计图表
+    ????锟斤拷:
+    1.???????????????????????????
+    2.?????????????????????锟斤拷??????????????????????锟斤拷???
+    ????????????
+    3.??????????
 %}
 clc;clear;
 disp('run time table script')
@@ -20,7 +20,7 @@ table_origin = readtable(timetable,'Delimiter','|',...
     'FileEncoding','utf-8','ReadVariableNames',false...
     );
 
-%--------------提取有效table-------------%
+%--------------?????锟斤拷table-------------%
 valid_table = table_origin(1:end,2:5);
 valid_table_size = size(valid_table);
 emptyline = 1;
@@ -39,7 +39,7 @@ for i = 1:1:valid_table_size(1)
 end
 valid_table = valid_table(1:emptyline,1:end);
 
-%-----------------补全----------------%
+%-----------------???----------------%
 valid_cell = table2cell(valid_table);
 size_temp = size(valid_cell);
 for i = 1:1:size_temp(1)
@@ -51,8 +51,8 @@ for i = 1:1:size_temp(1)
         end
     end
 end
-% table && cell 类似于二维数组
-% cell 数据删除
+% table && cell ????????????
+% cell ???????
 valid_cell(2,:) = [];
 valid_cell(1,:) = [];
 
@@ -60,24 +60,24 @@ clear chartemp emptyline emptylineflag i k size_temp timetable ...
     table_origin valid_table_size
 
 
-%-----------------信息提取----------------%
+%-----------------??????----------------%
 heading = {'date','time','item','other'};
-% todo:@parameter 2 作用 
+% todo:@parameter 2 ???? 
 valid_struct = cell2struct(valid_cell,heading,2);
 structSizeTemp = size(valid_struct);
 clc;
 disp('valid datas input')
 
 for i = 1:1:structSizeTemp(1)
-    % 格式化时间
+    % ????????
     data_temp = valid_struct(i).date;
-    rep = strrep(strrep(strrep(data_temp,'年','/'),'月','/'),'日'," ");
+    rep = strrep(strrep(strrep(data_temp,'??','/'),'??','/'),'??'," ");
     valid_struct(i).date = rep;
     timetemp = split(valid_struct(i).time,'-');
     startTimeTemp = strcat(rep,timetemp(1));
     finishTimeTemp = strcat(rep,timetemp(2));
 
-    % 统计时间(s)
+    % ??????(s)
     interTemp = etime(datevec(finishTimeTemp,'yyyy/mm/dd HH:MM'),...
                       datevec(startTimeTemp,'yyyy/mm/dd HH:MM'));
     if interTemp < 0
@@ -104,17 +104,17 @@ for i = 1:1:structSizeTemp(1)
     valid_struct(i).mand = mandtemp;
 end
 
-clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
-clear rep structSizeTemp startTimeTemp interTemp timetemp
-% ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ 
-% 事件信息构造完成
+% clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
+% clear rep structSizeTemp startTimeTemp interTemp timetemp
+% ?? ?? ?? ?? ?? ?? ?? ?? 
+% ?????????????
 
-%--------------统计分析--------------%
+%--------------??????--------------%
 
-%--------------统计总时间-------------%
+%--------------????????-------------%
 %{
-    1.事项 -> 事项详情
-    2.数据存储类型
+    1.???? -> ????????
+    2.????锟斤拷????
 %}
 anlysis_1 = true;
 if anlysis_1
@@ -128,34 +128,63 @@ if anlysis_1
     end
     explode = logical(periods);
     pie_temp = double(periods);
-    figure(1)
-    subplot(1,2,1)
-    suptitle("统计信息一");
-    % plot(pie_temp)
-    if true
-         bar(pie_temp,'FaceColor','c','EdgeColor',[0 .5 .5],...
-        'LineWidth',1.5)
-    else
-        bar(pie_temp,'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],...
-        'LineWidth',1.5)
-    end
-    grid on
+    if false
+        figure(1)
+        subplot(1,2,1)
+        suptitle("???????");
+        % plot(pie_temp)
+        if true
+            bar(pie_temp,'FaceColor','c','EdgeColor',[0 .5 .5],...
+            'LineWidth',1.5)
+        else
+            bar(pie_temp,'FaceColor',[0 .5 .5],'EdgeColor',[0 .9 .9],...
+            'LineWidth',1.5)
+        end
+        grid on
 
-    subplot(1,2,2)
-    pie(pie_temp,explode,pie_labels);
-    grid on
-    
+        subplot(1,2,2)
+        pie(pie_temp,explode,pie_labels);
+        grid on
+    end
 end
 
-%--------------事项统计-------------%
-things = strings(0);
+%% 
+%--------------???????-------------%
+%{
+    ????锟斤拷??
+    1.???????????????????
+    2.???????????????(ai);
+    3.??????锟斤拷??????;
+    4.????锟斤拷????;
+%}
+board = strings(0);
+detail = strings(0);
+board_temp = "";
+detail_temp = "";
 anlysis_items = true;
 if anlysis_items
     for i = linspace(1,len_temp(1),len_temp(1))
         periods_temp = valid_struct(i).interval;
         thing_temp = string(valid_struct(i).item);
-        contains()
-        things(i) = "";
+        if ~contains(board_temp,thing_temp)
+            board_temp = board_temp + " " + thing_temp;
+        end
+    end
+    %???????????????????????
+    if true
+        % ???????
+        repCharters_1 = [];
+        board = join(board_temp);
+        board = split(board," ");
+        % ???????????????
+        board(strlength(board) < 1) = [];
+        % ???
+        if false
+            draw_words = categorical(board);
+            wordcloud(draw_words,linspace(1,length(draw_words),length(draw_words)));
+        end
     end
 end
-clear explode i len_temp periods pie_labels pie_temp anlysis_1
+
+%
+% clear explode i len_temp periods pie_labels pie_temp anlysis_1
