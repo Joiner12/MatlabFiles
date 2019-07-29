@@ -1,4 +1,4 @@
-%% ??????
+%% filepath
 ScirptPath = 'D:\Codes\MatlabFiles\Blocks';
 if ~isequal(pwd,ScirptPath)
     cd(ScirptPath);
@@ -7,20 +7,17 @@ fprintf("load path:%s\n",pwd);
 
 %%
 %{
-    ????锟斤拷:
-    1.???????????????????????????
-    2.?????????????????????锟斤拷??????????????????????锟斤拷???
-    ????????????
-    3.??????????
+    Design thoughts:
+
 %}
 clc;clear;
-disp('run time table script')
+disp('Run time table script')
 timetable = 'C:\Users\10520\Desktop\TimeItem.txt';
 table_origin = readtable(timetable,'Delimiter','|',...
     'FileEncoding','utf-8','ReadVariableNames',false...
     );
 
-%--------------?????锟斤拷table-------------%
+%--------------Get origin table-------------%
 valid_table = table_origin(1:end,2:5);
 valid_table_size = size(valid_table);
 emptyline = 1;
@@ -39,7 +36,7 @@ for i = 1:1:valid_table_size(1)
 end
 valid_table = valid_table(1:emptyline,1:end);
 
-%-----------------???----------------%
+%-----------------Valid cell----------------%
 valid_cell = table2cell(valid_table);
 size_temp = size(valid_cell);
 for i = 1:1:size_temp(1)
@@ -51,8 +48,7 @@ for i = 1:1:size_temp(1)
         end
     end
 end
-% table && cell ????????????
-% cell ???????
+% table && cell are same;
 valid_cell(2,:) = [];
 valid_cell(1,:) = [];
 
@@ -60,7 +56,7 @@ clear chartemp emptyline emptylineflag i k size_temp timetable ...
     table_origin valid_table_size
 
 
-%-----------------??????----------------%
+%--------------------nothing ----------------%
 heading = {'date','time','item','other'};
 % todo:@parameter 2 ???? 
 valid_struct = cell2struct(valid_cell,heading,2);
@@ -69,15 +65,14 @@ clc;
 disp('valid datas input')
 
 for i = 1:1:structSizeTemp(1)
-    % ????????
+    % 
     data_temp = valid_struct(i).date;
-    rep = strrep(strrep(strrep(data_temp,'??','/'),'??','/'),'??'," ");
+    rep = strrep(strrep(strrep(data_temp,'年','/'),'月','/'),'日'," ");
     valid_struct(i).date = rep;
     timetemp = split(valid_struct(i).time,'-');
     startTimeTemp = strcat(rep,timetemp(1));
     finishTimeTemp = strcat(rep,timetemp(2));
 
-    % ??????(s)
     interTemp = etime(datevec(finishTimeTemp,'yyyy/mm/dd HH:MM'),...
                       datevec(startTimeTemp,'yyyy/mm/dd HH:MM'));
     if interTemp < 0
@@ -106,15 +101,13 @@ end
 
 % clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
 % clear rep structSizeTemp startTimeTemp interTemp timetemp
-% ?? ?? ?? ?? ?? ?? ?? ?? 
-% ?????????????
 
-%--------------??????--------------%
+%--------------原始表格获取完成--------------%
 
-%--------------????????-------------%
+%--------------统计分析-------------%
 %{
-    1.???? -> ????????
-    2.????锟斤拷????
+    设计思路：
+    1.初步统计事项，时间
 %}
 anlysis_1 = true;
 if anlysis_1
@@ -149,37 +142,51 @@ if anlysis_1
 end
 
 %% 
-%--------------???????-------------%
+%--------------统计分析-------------%
 %{
-    ????锟斤拷??
-    1.???????????????????
-    2.???????????????(ai);
-    3.??????锟斤拷??????;
-    4.????锟斤拷????;
+   设计思路：
+   1.GUI；
+   2.每天有效时间；
+   3.大类时间，具体事项时间；
+   4.数据存储格式选择cell；
 %}
+clc;
 board = strings(0);
 detail = strings(0);
 board_temp = "";
 detail_temp = "";
+days_temp = "";
+daynum = 0;
 anlysis_items = true;
+% 每天有效时间
+% datatimesize_temp = []
+% datatime = table();
 if anlysis_items
+    % 天数统计
+    
     for i = linspace(1,len_temp(1),len_temp(1))
+        % 天数统计
+        % if ~contains(days_temp,valid_struct(i).date)
+        %     days_temp = days_temp + " " + valid_struct(i).date;
+        %     daynum = daynum + 1 ;
+        % end
+
         periods_temp = valid_struct(i).interval;
         thing_temp = string(valid_struct(i).item);
         if ~contains(board_temp,thing_temp)
             board_temp = board_temp + " " + thing_temp;
         end
     end
-    %???????????????????????
+    %云图
     if true
-        % ???????
+        % 删除空字符
         repCharters_1 = [];
         board = join(board_temp);
         board = split(board," ");
-        % ???????????????
+
         board(strlength(board) < 1) = [];
-        % ???
-        if false
+        % 云图
+        if true
             draw_words = categorical(board);
             wordcloud(draw_words,linspace(1,length(draw_words),length(draw_words)));
         end
@@ -188,3 +195,5 @@ end
 
 %
 % clear explode i len_temp periods pie_labels pie_temp anlysis_1
+%% 
+% day_1 = valid_struct(end).date - valid_struct(1).date;

@@ -39,6 +39,7 @@ function DrawWordsCloud(fullfile)
         content = fileread(fullfile);
         content_str = string(content);
         content_str = replace(content_str,[repCharters_1 repCharters_2 gbkCharters_1]," ");
+        % 将字符串分解成字符串数组
         words = split(join(content_str));
         words(strlength(words) < 1) = [];
         draw_words = categorical(words);
