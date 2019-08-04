@@ -1,17 +1,16 @@
 %% filepath
-ScirptPath = 'D:\Codes\MatlabFiles\Blocks';
-if ~isequal(pwd,ScirptPath)
+clc;
+fprintf("load path...\n%s\n",pwd);
+if ~isequal(pwd,'D:\Codes\MatlabFiles\Blocks')
     cd(ScirptPath);
 end
-fprintf("load path:%s\n",pwd);
-
 %%
 %{
     Design thoughts:
-
 %}
-clc;clear;
+clear;
 close all;
+%--------------get info from txt-------------%
 disp('Run time table script')
 Time_01 = tic;
 timetable = 'C:\Users\10520\Desktop\TimeItem.txt';
@@ -53,13 +52,13 @@ end
 valid_cell(2,:) = [];
 valid_cell(1,:) = [];
 
-clear chartemp emptyline emptylineflag i k size_temp timetable ...
-    table_origin valid_table_size
+% clear chartemp emptyline emptylineflag i k size_temp timetable ...
+%     table_origin valid_table_size
 
-
+%% 
 %--------------------valid struct ----------------%
 heading = {'date','time','item','other'};
-% todo:@parameter 2 ???? 
+% todo:@parameter 2
 valid_struct = cell2struct(valid_cell,heading,2);
 structSizeTemp = size(valid_struct);
 % clc;
@@ -101,9 +100,10 @@ for i = 1:1:structSizeTemp(1)
 end
 disp('Valid Struct Got')
 toc(Time_01)
-% clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
-% clear rep structSizeTemp startTimeTemp interTemp timetemp
+clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
+clear rep startTimeTemp interTemp timetemp
 
+%%
 %--------------原始表格获取完成--------------%
 
 %--------------统计分析-------------%
@@ -142,6 +142,8 @@ if anlysis_1
         grid on
     end
 end
+clear anlysis_1 explode i  periods pie_labels ...
+    pie_temp 
 toc(Time_01)
 %%
 %--------------统计分析-------------%
@@ -153,7 +155,6 @@ toc(Time_01)
    4.数据存储格式选择cell；
 %}
 % clc;
-board = strings(0);
 detail = strings(0);
 board_temp = "";
 detail_temp = "";
@@ -190,27 +191,31 @@ if anlysis_items
         end
     end
 end
-% clear explode i len_temp periods pie_labels pie_temp anlysis_1
 %% 
 %---------统计一天有效时间-----------%
 %{
     设计思路：
     1.nestedstruct结构存储；
     2.统计一天有效时间；
+    3.统计一天中具体事情的时间花费
 %}
 % clc;
 disp('统计一天有效时间')
 % hours
+% 通过有效记录表中的起始-终止日期计算总天数
 days = hours(datetime(valid_struct(end).date) ...
              - datetime(valid_struct(1).date));
 days = days/24;
 fprintf('All days:%d\n',days);
 
+% 有效表格-以天为主导存储内容
 valid_day_neststruct = struct('date',{},'validPeriod',{},'item',...
-                             struct('detail',{},'detailPeriod',{}));
+                             struct('detail',{},'detailPeriod',{},'allTime',{}));
 
 % 日期在struct中的位置
-datePosTemp = zeros(0);
+% 遍历方式：以存储结构行为单位
+
+datePosTemp = zeros(0); % 以日期为单位，记录内容（条数）
 nestStructCnt = 1;
 dateStrTemp = "";
 for i=1:1:length(valid_struct)
@@ -229,12 +234,24 @@ end
 % 每天有效时间统计 min
 nestStructCnt = 1;
 for i = 1:1:length(datePosTemp)-1
+    dayItemTemp = "";
     valid_day_neststruct(nestStructCnt).validPeriod = 0;
     try
+        % 单日信息
         for k = linspace(datePosTemp(i),datePosTemp(i+1),datePosTemp(i+1) - datePosTemp(i)+1)
+            % 单日有效时间
             valid_day_neststruct(nestStructCnt).validPeriod =...
              valid_day_neststruct(nestStructCnt).validPeriod...
              + valid_struct(k).interval;
+            
+            % 单日事项
+            itemTemp = string(valid_struct(k).item);
+            if contains(dayItemTemp,itemTemp)
+                % valid_day_neststruct(nestStructCnt).item.detail = 
+                fprintf('%s\n',itemTemp)
+            else
+                dayItemTemp  = dayItemTemp + string(valid_struct(k).item);
+            end
         end
     catch
         fprintf('索引错误%d\n',k);
@@ -242,7 +259,7 @@ for i = 1:1:length(datePosTemp)-1
     nestStructCnt = nestStructCnt + 1;
 end
 % 绘制柱状图
-if true
+if false
     datePeriod = zeros(0);
     datePeriodDate = strings(0);
     for i=1:1:length(valid_day_neststruct)
@@ -260,3 +277,81 @@ if true
     grid on
 end
 toc(Time_01)
+
+%% 
+%{
+    统计具体事项的时间花费
+    1.查询的方式
+%}
+clc;    
+disp('统计事项的时间...')
+
+%-----------生成所有子项目-----------%
+itemCnttemp = 1;
+ALL_Items = strings(0);
+itemStrtemp = "";
+for i = linspace(1,structSizeTemp(1),structSizeTemp(1))
+    if ~contains(itemStrtemp,string(valid_struct(i).item))
+        itemStrtemp = itemStrtemp + string(valid_struct(i).item);
+        ALL_Items(itemCnttemp) = string(valid_struct(i).item);
+        itemCnttemp = itemCnttemp + 1;
+    end
+end
+
+disp('生成所有时间类型完成....')
+for i = 1:1:5
+    i_1 = 0;
+    while i_1 < i
+        fprintf('****')
+        i_1 = i_1 + 1;
+    end
+    fprintf('\n')
+end
+
+%-----------获取需要统计的信息-----------%
+inValidDetail = false;
+try
+    detail_temp = input('需要统计的项目:','s');
+    if ~isempty(detail_temp) && contains(itemStrtemp,string(detail_temp))
+        disp('valid string input')
+        inValidDetail = true;
+    else
+        fprintf('No such detail:%s\n',detail_temp)
+    end
+catch
+    warning('nothing todo ')
+end
+
+if inValidDetail
+    %-----------统计单项总时间-----------%
+    pos_In = zeros(0);
+    posInCnt = 1;
+    Duration_Detail = 0;
+    try
+        for i = linspace(1,structSizeTemp(1),structSizeTemp(1))
+            if contains(valid_struct(i).item,detail_temp)
+                Duration_Detail = Duration_Detail + valid_struct(i).interval;
+                pos_In(posInCnt) = i;
+                posInCnt = posInCnt + 1;
+            end
+        end
+    catch
+       warning('未知错误')
+    end
+    fprintf('%s,总时间：%d\n',detail_temp,Duration_Detail)
+    clear itemCnttemp itemStrtemp i ItemStr time_itemstr i_1 ans  
+    % clear Duration_Detail detail_temp
+    if true
+        % 绘图
+        figure
+        bar(categorical(cellstr(detail_temp)),Duration_Detail,'FaceColor',[0 .5 .5],...
+            'EdgeColor',[0 .9 .9],'LineWidth',1.5)
+        set(get(gca, 'Title'), 'String', 'noh');
+        set(get(gca, 'XLabel'), 'String', 'min');
+        grid on
+    end
+end
+toc(Time_01)
+
+clearvars -except valid_struct valid_day_neststruct...
+    valid_table valid_cell
