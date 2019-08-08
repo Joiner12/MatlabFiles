@@ -25,3 +25,11 @@ while whileLoopCnt < 10
     whileLoopCnt = whileLoopCnt + 1;    
 end
 
+%% 
+% tan()函数看起来好像有点东西
+x = -pi/4:0.01:pi/2-0.001;
+figure(1)
+plot(x,tan(x),'-*');
+% axis([ -100 100 -pi/2 pi/2])
+axis('auto')
+grid minor
