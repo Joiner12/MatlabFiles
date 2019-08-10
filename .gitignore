@@ -1,0 +1,5 @@
+# No track *.asv
+*.asv
+
+# No track D:/Codes/MatlabFiles/Blocks/TickTockFiles
+TickTockFiles/
