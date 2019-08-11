@@ -31,4 +31,13 @@ fclose(log);
 
 %% 
 clc
-filename = datestr(now,'Logyyyymmdd')
+StartTick = datestr(datetime('now'),'yy/mm/dd  HH:MM');
+etime(datevec(datetime('now')),datevec(StartTick))
+filename = datestr(now,'Logyyyymmdd');
+
+%% 
+clc;
+clear all;
+ans_01 = {'sdf','fds'};
+anafd = ans_01{1};
+fprintf('%s\n',ans_01{1})

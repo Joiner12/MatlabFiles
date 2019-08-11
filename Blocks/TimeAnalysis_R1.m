@@ -55,7 +55,7 @@ valid_cell(1,:) = [];
 % clear chartemp emptyline emptylineflag i k size_temp timetable ...
 %     table_origin valid_table_size
 
-%% 
+
 %--------------------valid struct ----------------%
 heading = {'date','time','item','other'};
 % todo:@parameter 2
@@ -103,7 +103,7 @@ toc(Time_01)
 clear data_temp finishTimeTemp heading MAND len_temp i mandtemp;
 clear rep startTimeTemp interTemp timetemp
 
-%%
+
 %--------------原始表格获取完成--------------%
 
 %--------------统计分析-------------%
@@ -145,7 +145,7 @@ end
 clear anlysis_1 explode i  periods pie_labels ...
     pie_temp 
 toc(Time_01)
-%%
+
 %--------------统计分析-------------%
 %{
    设计思路：
@@ -191,7 +191,7 @@ if anlysis_items
         end
     end
 end
-%% 
+
 %---------统计一天有效时间-----------%
 %{
     设计思路：
@@ -259,7 +259,7 @@ for i = 1:1:length(datePosTemp)-1
     nestStructCnt = nestStructCnt + 1;
 end
 % 绘制柱状图
-if false
+if true
     datePeriod = zeros(0);
     datePeriodDate = strings(0);
     for i=1:1:length(valid_day_neststruct)
@@ -278,7 +278,7 @@ if false
 end
 toc(Time_01)
 
-%% 
+
 %{
     统计具体事项的时间花费
     1.查询的方式
