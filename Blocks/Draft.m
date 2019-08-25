@@ -67,20 +67,11 @@ back_tab01 = imread('D:\±ÚÖ½\Wallpaper_2.jpg');
 imshow(back_tab01,'Parent',p);
 
 %% 
-f = waitbar(0,'Please wait...');
-pause(.5)
-
-waitbar(.33,f,'Loading your data');
-pause(1)
-
-waitbar(.67,f,'Processing your data');
-pause(1)
-
-waitbar(1,f,'Finishing');
-pause(1)
-
-close(f)
-
-%% 
-State = {'START','STOP'};
-State{1}
+clc;clear;
+fatherfolder = dir('D:\Codes\MatlabFiles\Blocks\TickTockFiles');
+childfolders = strings(0);
+logpath = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
+for i = 3:1:length(fatherfolder)
+    childfolders(i-2) = fatherfolder(i).name;
+end
+strfind(childfolders,"Logs")
