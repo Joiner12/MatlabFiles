@@ -6,7 +6,7 @@ PurposePath = 'D:\Codes\MatlabFiles\ADRC';
 if ~strcmp(PurposePath,pwd)
     cd D:\Codes\MatlabFiles\ADRC
 end
-fprintf('load path\t>>>>\t%s\n',pwd)
+fprintf('load path...\n%s\n',pwd)
 clear ans
 %%
 % 测试函数
@@ -20,51 +20,92 @@ clear ans
         但当 v 被噪声污染时，会使信号 x1被更大的噪 声所污染。
         为了滤掉 x1 所含的噪声，选取适当的 h1，能获 得很好的滤波效果。然而，
         h1 越大，就会使 x1 跟踪信号 v 的相位损失也越大。 
-    Reference:[1]韩京清，武利强，TD滤波器及其应用
+    Reference:
+    [1]韩京清，武利强，TD滤波器及其应用
+    [2]张海丽，张宏立，微分跟踪器的研究与应用，化工自动化及仪表，
+        2013，40（04），474-477
 %}
-
-fprintf("微分-跟踪器测试\n");
 clc;
-% clear;
-t = linspace(0,199,200); % s
-signal_fre = 10; % hz'
-sample_fre = 0.01; %hz'
-v = 10*sin(2*pi*signal_fre.*t) + (rand(1,200).*2 - 1);
-OptCnt = 0;
-x1 = zeros(200,1);
-x2 = zeros(200,1);
-diff_theroyvalue = 10*cos(2*pi*signal_fre.*t);
-h1 = 0.1 ; r = 400;
-while OptCnt < length(t)
-    OptCnt = OptCnt + 1;
-    if OptCnt > 1
-        [x1(OptCnt),x2(OptCnt)]  = TDR1(x1(OptCnt-1),x2(OptCnt-1),...
-        v(OptCnt - 1),h1,r);
-    end
-end
+fprintf("微分-跟踪器测试\n");
+t = zeros(0);
+ts = 1e-3;              % 采样周期
 
+% 仿真信号
+signal_fre = 10; % hz'
+signal_amp = 1;
+
+% 正弦信号 + 随机噪声
+v = zeros(0);
+diff_theroyvalue = zeros(0);
+time = zeros(0);
+x1 = zeros(0);
+x2 = zeros(0);
+lpx1 = zeros(0);
+lpx2 = zeros(0);
+v_dis = 0;
+
+% 仿真时间
+simutime = 2;   % s
+h1 = ts ; r = 1000;
+for i = 1:1:simutime/ts
+    v_cur = signal_amp*sin(2*pi*signal_fre*i*ts);
+    if mod(i,20) == 0
+        v_dis = (rand - 0.5)*signal_amp/10 ;
+    end
+    v_cur = v_cur + v_dis;
+    time(i) = i*ts;
+    v(i) = v_cur;
+    if isequal(i,1)
+        x1(i) = 0;
+        x2(i) = 0;
+        diff_temp = v_cur/ts;
+    else
+        [x1(i),x2(i)]  = TDR1(x1(i-1),x2(i-1),...
+            v_cur,h1,r);
+        diff_temp = (v(i) - v(i-1))/ts;
+    end
+    diff_theroyvalue(i) = diff_temp;
+    
+    % 局部一阶低通滤波
+    if isequal(i,1)
+        lpx1(i) = 0;
+        lpx2(i) = 0;
+    else
+        lp_cof = 0.4;
+        lpx1(i) = v_cur*lp_cof + lpx1(i-1)*(1 - lp_cof);
+        lpx2(i) = (lpx1(i) - lpx1(i-1))/ts;
+    end
+    
+end
 % figure
 close all;
 figure(1)
-plot(v)
-hold on 
-plot(x1)
-hold on 
-plot(x2)
-hold on 
-plot(diff_theroyvalue)
-legend('原始','跟踪信号','微分信号','理论微分值')
+subplot(2,2,1)
+plot(time,v,time,x1,time,x2,time,diff_theroyvalue)
+legend('输入信号','跟踪信号','微分信号','理论查分值')
+set(get(gca, 'XLabel'), 'String', 't/m');
+set(get(gca, 'YLabel'), 'String', 'height/mm');
 
+subplot(2,2,2)
+plot(time,lpx1,time,x1)
+legend('低通','微分跟踪器x1')
+
+subplot(2,2,3)
+plot(time,lpx2,time,x2*80)
+legend('低通','微分跟踪器x2')
 %% 函数模块
 %{
-    @param:{
-        x1_k1 = x1(k+1);        (1)
-        x2_k1 = x2(k+1);        (2)
+    @param:
+    {
+        x1_k1 = x1(k+1);        (1) 跟踪信号
+        x2_k1 = x2(k+1);        (2) 跟踪微分信号
         x1_k = x1(k);           (3)
         x2_k = x2(k);           (4)
-        v_k = v(k);             (5)
+        v_k = v(k);             (5) 原始信号
         y_k = y(k);             (6)
-        }
+        h;                      (7) 积分步长
+        r;                      (8) 速度因子
+    }
     涉及到微分相关参数初始化需要在函数外部完成；
     
 %}
@@ -89,6 +130,9 @@ end
 
 %------------------g(k)--------------------%
 %{
+    参数：
+    r                                   (1) 速度因子
+    h1                                  (2) 滤波因子   
     公式：
     d = h1*r                            (1) 
     d1 = h1*d                           (2)
