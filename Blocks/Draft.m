@@ -77,9 +77,4 @@ end
 strfind(childfolders,"Logs")
 
 %% 
-clc;
-file = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs\2019-08-26.txt';
-fileId = fopen(file,'a+');
-fprintf(fileId,'%s\n','жпнд');
-winopen(file)
-fclose(fileId);
+% watingbar
