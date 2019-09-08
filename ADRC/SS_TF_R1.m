@@ -10,6 +10,8 @@ clear ans
 
 %% 
 clc;
+T = 1e-3;
 s = tf('s');
 tf_ob = 16/(s^2 + 0.5*s)
-sys = ss(tf_ob)
+sys = ss(tf_ob);
+[num,den] = tfdata(c2d(tf_ob,T,'zoh'),'v')
