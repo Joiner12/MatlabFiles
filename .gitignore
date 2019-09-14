@@ -8,3 +8,7 @@ TickTockFiles/
 MusicVisual/
 SysModel_grt_rtw/
 slprj/
+
+
+# .mat
+*.mat

@@ -77,4 +77,5 @@ end
 strfind(childfolders,"Logs")
 
 %% 
-% watingbar
+% dialog
+dialog()
