@@ -1,3 +1,4 @@
+
 clc;
 clear;
 if ~isequal('D:\Codes\MatlabFiles\Blocks',pwd)
@@ -62,7 +63,7 @@ for i = 1:1:channlesize
                 + Num(3)*left_channle(i-2)...
                 + Num(4)*left_channle(i-3) ...
                 -((Den(1)*leftOut(i-1)) + (Den(2)*leftOut(i-2)+ Den(3)*leftOut(i-3)));
-                
+            
             if leftOut(i) > 100 && false
                 fprintf('%d\n',i);
             end
@@ -85,3 +86,78 @@ hold on
 plot(left_channle(1:end))
 legend('filter','bbefo')
 grid minor
+
+
+%%
+% ========================================================================
+%{
+    Block:Music Visualizer
+    1.音乐可视化
+%}
+% load file...
+clc;
+close all ;
+clear;
+filepath = 'C:\Users\10520\Desktop';
+filename = 'David Guetta,Sam Martin - Lovers On The Sun (Radio Edit).mp3';
+file = fullfile(filepath,filename);
+[audioFile,fs] = audioread(file);
+fftSrc = audioFile(:,1);
+audioSun = audioplayer(audioFile,fs);
+%%
+systick = tic;
+
+figure
+gap = 1000;
+close all;
+clf;
+% 建立figure
+for i = 1:1:int32(length(fftSrc)/gap)
+    if i == 1
+        play(audioSun);
+    end
+    tail = i*gap;
+    head = (i - 1)*gap + 1;
+    fprintf('toc:%d\n',toc(systick));
+    pause(gap*0.8/fs);
+    ax1 = subplot(211);
+    cla;
+    [fre,amp] = myFFT(fftSrc(head:tail),fs);
+    areAX = area(ax1,fre(20:1:end),amp(20:1:end));
+    areAX.FaceColor =  [0 0.75 0.75];
+    areAX.EdgeColor = 'green';
+    hold on
+    baAx = bar(ax1,fre(20:1:end),-amp(20:1:end));
+
+    xlim([800 fs/4]);
+    ylim([-15 15]);
+    
+    ax2 = subplot(212);
+    cla;
+    plot(ax2,fftSrc(head:tail))
+    ylim([-2,2])
+    hold on 
+  
+    drawnow;
+end
+
+% ========================================================================
+%% 
+stop(audioSun)
+close all;
+clc;
+% ========================================================================
+%{
+    fft
+    reference:matlab doc
+%}
+function [Fre,Amp] = myFFT(src,fs)
+srclen = length(src);
+y = fft(src);
+P2 = 200*abs(y/srclen);
+P1 = P2(1:int32(srclen/2+1));
+P1(2:end-1) = P1(2:end-1);
+Amp = P1;
+f = fs*(0:(srclen/2))/srclen;
+Fre = f';
+end
