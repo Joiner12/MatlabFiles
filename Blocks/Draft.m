@@ -17,7 +17,7 @@ pause(5)
 t2 = datetime('now');
 etime(datevec(t2),datevec(t1))
 
-%% 
+%%
 logpath = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles';
 logname = 'log.txt';
 clc;
@@ -29,20 +29,20 @@ if log ~= 0
 end
 fclose(log);
 
-%% 
+%%
 clc
 StartTick = datestr(datetime('now'),'yy/mm/dd  HH:MM');
 etime(datevec(datetime('now')),datevec(StartTick))
 filename = datestr(now,'Logyyyymmdd');
 
-%% 
+%%
 clc;
 clear all;
 ans_01 = {'sdf','fds'};
 anafd = ans_01{1};
 fprintf('%s\n',ans_01{1})
 
-%% openfile 
+%% openfile
 file = 'C:\Users\10520\Desktop\draft.txt';
 winopen(file)
 
@@ -52,21 +52,21 @@ title_01 = 'KEEP INFO';
 dims_01 = [1 40];
 answer_01 = inputdlg(prompt_01,title_01,dims_01);
 
-%% 
-try 
+%%
+try
     cd('F:\')
 catch
     disp('f')
 end
 
-%% 
+%%
 clc;close all;
 f = figure('name','pic');
 p = plot(1,1)
-back_tab01 = imread('D:\±ÚÖ½\Wallpaper_2.jpg');
+back_tab01 = imread('D:\ï¿½ï¿½Ö½\Wallpaper_2.jpg');
 imshow(back_tab01,'Parent',p);
 
-%% 
+%%
 clc;clear;
 fatherfolder = dir('D:\Codes\MatlabFiles\Blocks\TickTockFiles');
 childfolders = strings(0);
@@ -76,6 +76,61 @@ for i = 3:1:length(fatherfolder)
 end
 strfind(childfolders,"Logs")
 
-%% 
-% dialog
-dialog()
+%%
+% 19/09/16  22:00:04	|
+clc;
+prompt = {'Start Time','Finish Time','Item','Detail'};
+dlgtitle = 'Add a piece of Time log';
+dims = [1 60];
+dateformat = 'yy/mm/dd HH:MM';
+defaultTime = datestr(datetime('now'),dateformat);
+definput = {defaultTime,defaultTime,'',''};
+answer = inputdlg(prompt,dlgtitle,dims,definput);
+startTemp = defaultTime;
+finishTemp = defaultTime;
+if isempty(answer)
+    info_temp = 'cancle';
+    return;
+end
+
+startTemp = answer{1};
+starttemp = datestr(startTemp,'HH:MM');
+finishTemp = answer{2};
+finishtemp = datestr(finishTemp,'HH:MM');
+gaptemp = minutes(duration(finishtemp,'InputFormat','hh:mm')...
+    - duration(starttemp,'InputFormat','hh:mm'));
+% app.LogPath = ' D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
+LogPath = ' D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
+filenameTemp = strcat('20', datestr(answer{2},'yy-mm-dd'));
+filetxt = fopen(strcat(fullfile(LogPath,filenameTemp),'.txt'),'a+');
+if filetxt ~= 0
+    % fprintf(filetxt,'%s\t%s\t%s\t%s\t%d\n',)
+    fprintf(filetxt,'%s\t|\t%s\t|\t%s\t|\t%s\t|\t%d\n',strcat(answer{1},':00')...
+        ,strcat(answer{2},':00'),answer{3},answer{4},gaptemp);
+end
+fclose(filetxt);
+% winopen(filenameTemp)
+% txtfile = fopen()
+
+% close()
+
+%%
+clc;
+newlogfile = false;
+for i = linspace(1,length(dirans(1,:)),length(dirans(1,:)))
+    temp = dirans{1,i};
+    if isequal(temp,answer{1})
+        fprintf('equal')
+    else
+        fprintf('noth')
+    end
+end
+
+%%
+clc;
+datestr(datetime('now'),'yyyy/mm/dd HH:MM')
+
+
+
+%%
+winopen('D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs\2019-09-22.txt')
