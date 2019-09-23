@@ -127,10 +127,8 @@ for i = linspace(1,length(dirans(1,:)),length(dirans(1,:)))
 end
 
 %%
-clc;
-datestr(datetime('now'),'yyyy/mm/dd HH:MM')
-
-
-
-%%
-winopen('D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs\2019-09-22.txt')
+%{
+    view log
+%}
+clc;clearvars;
+LogPath = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
