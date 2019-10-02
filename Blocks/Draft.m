@@ -128,7 +128,26 @@ end
 
 %%
 %{
-    view log
+    日志查看，选择日期
 %}
-clc;clearvars;
-LogPath = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
+uf = uifigure;
+d = uidatepicker(uf)
+d.InnerPosition = [1 1 150 20];
+d.Value
+d.DisplayFormat = 'yyyy-M-dd';
+%% 
+%{
+    dir
+%}
+clc;
+a = dir('D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs');
+file_temp = "";
+for i = 1:1:length(a)
+    file_temp = strcat(a(i).name,'|',file_temp);
+end
+strfind(file_temp,datestr(datetime('tomorrow'),'yyyy-mm-dd'))
+
+%% 
+promt_1 = '不要点了，没想好写啥！！';
+h = msgbox(promt_1,'Nan','help');
+delete(h)
