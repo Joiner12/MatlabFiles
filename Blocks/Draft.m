@@ -151,3 +151,69 @@ strfind(file_temp,datestr(datetime('tomorrow'),'yyyy-mm-dd'))
 promt_1 = '不要点了，没想好写啥！！';
 h = msgbox(promt_1,'Nan','help');
 delete(h)
+%% 
+clc;
+Gen_Ans = questdlg('生成报表?','Report','Yes','No','No');
+switch Gen_Ans
+    case 'Yes'
+        tableTemp = readtable('C:\Users\10520\Desktop\2019-10-02.txt');
+%         fileID = fopen('C:\Users\10520\Desktop\2019-10-02.txt','r');
+        fprintf('generate report\n');
+%         fclose(fileID);
+    otherwise
+end
+
+%% 
+clc;clear;
+tableTemp = readtable('C:\Users\10520\Desktop\2019-10-02.txt','Delimiter','|');
+detailArrayTemp = strings(0);
+detailArrayTimeTemp = zeros(0);
+detailTemp = "";
+detailCntTemp = 1;
+for i = 1:1:length(tableTemp.Var1)
+    % 补全表格
+    if isempty(tableTemp.Var4(i)) || isempty(tableTemp.Var5(i))&& i > 1
+        tableTemp.Var4(i) = tableTemp.Var4(i-1);
+        tableTemp.Var5(i) = tableTemp.Var5(i-1);
+    end
+    % dictionary
+    if ~contains(detailTemp,char(tableTemp.Var4(i)))
+        detailTemp = strcat(detailTemp,tableTemp.Var4(i));
+        detailArrayTemp(detailCntTemp) = tableTemp.Var4(i);
+        detailArrayTimeTemp(detailCntTemp) = 0;
+        detailCntTemp = detailCntTemp + 1;
+    end
+end
+clearvars i;
+%dictionary
+for i = 1:1:length(tableTemp.Var1)
+    for j = 1:1:length(detailArrayTemp)
+        if detailArrayTemp(j) == tableTemp.Var4(i)
+            postemp = j;
+            break;
+        end
+    end
+    detailArrayTimeTemp(postemp) = detailArrayTimeTemp(postemp) + ...
+        tableTemp.Var5(i);
+end
+%% 
+% 生成bar数据
+clc;
+tempCell = cell(size(detailArrayTemp));
+for j = 1:1:length(detailArrayTemp)
+    tempStr = strcat(detailArrayTemp(j),'|',num2str(detailArrayTimeTemp(j)));
+    tempStr = char(tempStr);
+    tempCell{j} = tempStr;
+end
+
+if length(detailArrayTemp)==1
+    return;
+end
+f = figure(1);
+subplot(211)
+pie(detailArrayTimeTemp,detailArrayTemp)
+subplot(212)
+ar = detailArrayTimeTemp';
+b2 = bar(detailArrayTimeTemp);
+b1 = bar(categorical(tempCell),detailArrayTimeTemp);
+cla(f,'reset')
