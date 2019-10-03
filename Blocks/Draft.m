@@ -217,3 +217,31 @@ ar = detailArrayTimeTemp';
 b2 = bar(detailArrayTimeTemp);
 b1 = bar(categorical(tempCell),detailArrayTimeTemp);
 cla(f,'reset')
+
+%% 
+%{
+    ¶ÁÈ¡¸è´ÊÎÄ¼þ
+%}
+clc;
+filepath = 'D:\Softwares\foobar2000\lyrics\';
+flc = dir(filepath);
+lrcfile = strings(0);
+cnt = 1;
+for i=2:1:length(flc)
+   if contains(flc(i).name,'.lrc')
+       lrcfile(cnt) = flc(i).name;
+       fprintf('%s\n',lrcfile(cnt));
+       cnt = cnt + 1;
+   end
+end
+
+%% 
+clc;
+options = weboptions('RequestMethod','get','CharacterEncoding','UTF-8');
+url = 'http://news.iciba.com/views/dailysentence/daily.html#!/detail/title/2019-10-03';
+strf = webread(url,options);
+tarFile = 'C:\Users\10520\Desktop\daily.txt';
+websave(tarFile,url)
+
+%%
+4a572ea 4c4dd33

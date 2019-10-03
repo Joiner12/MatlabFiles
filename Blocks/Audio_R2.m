@@ -23,3 +23,5 @@ colormap bone
 colorbar off
 axis off
 title('Ìì¿ÕÖ®³Ç')
+
+
