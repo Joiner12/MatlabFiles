@@ -235,13 +235,14 @@ for i=2:1:length(flc)
    end
 end
 
-%% 
-clc;
-options = weboptions('RequestMethod','get','CharacterEncoding','UTF-8');
-url = 'http://news.iciba.com/views/dailysentence/daily.html#!/detail/title/2019-10-03';
-strf = webread(url,options);
-tarFile = 'C:\Users\10520\Desktop\daily.txt';
-websave(tarFile,url)
-
 %%
-4a572ea 4c4dd33
+clc;
+close all
+h = figure;
+a = [1,2];
+b = [2,2];
+% plot(a,b);
+rectangle('Position',[0 0 100 1])
+% hold on 
+% rectangle('Position',[1 1 3 4])
+% set(gca,'xlim',[-1,6],'ylim',[-1, 7])
