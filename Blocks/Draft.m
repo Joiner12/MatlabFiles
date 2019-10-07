@@ -235,14 +235,31 @@ for i=2:1:length(flc)
    end
 end
 
-%%
+%% time stats bar
 clc;
 close all
 h = figure;
 a = [1,2];
 b = [2,2];
 % plot(a,b);
-rectangle('Position',[0 0 100 1])
+rectangle('Position',[1 100 600 50])
+xlim([0 640]);
+ylim([0 410]);
 % hold on 
 % rectangle('Position',[1 1 3 4])
 % set(gca,'xlim',[-1,6],'ylim',[-1, 7])
+
+%{
+    app.UIAxes2 = uiaxes(app.StatsTab);
+    app.UIAxes2.FontSize = 1;
+    app.UIAxes2.XLim = [0 1];
+    app.UIAxes2.XColor = [1 1 1];
+    app.UIAxes2.XTick = [];
+    app.UIAxes2.XTickLabel = {'[ ]'};
+    app.UIAxes2.YColor = [1 1 1];
+    app.UIAxes2.YTick = [];
+    app.UIAxes2.TitleFontWeight = 'bold';
+    app.UIAxes2.Clipping = 'off';
+    app.UIAxes2.Position = [1 1 634 404];
+%}
+
