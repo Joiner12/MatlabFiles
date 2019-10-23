@@ -16,7 +16,7 @@ figure('color','w'),view(70,70),axis image off
 surface(r.*cos(t*pi),r.*sin(t*pi),...
     u.*(x.*cos(p)-y.*sin(p)),'EdgeColor','none','FaceColor','r')
 light('style','local','pos',[1 -1 3]),lighting gouraud
-
+    
 %%
 %{
     Reference:https://www.zhihu.com/question/27780598/answer/601911383
