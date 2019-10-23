@@ -8,20 +8,20 @@ fprintf('%s\n',pwd)
 clc;
 t1 = tic;
 fprintf('cxks...\n');
-im = 'C:\Users\10520\Desktop\cxk.jpg';
-A = imread(im);
-B = zeros(178,284);
+% [file,path] = uigetfile({'*.png'});
+im = 'C:\Users\10520\Desktop\cxk.png';
+[A,map] = imread(im);
 C = rgb2gray(A);
-B = uint8(B);
+imshow(C)
 a_size = size(C);
 for i = 1:1:a_size(1)
-    for j = 1:1:size(2)
-        if C(i,j) < 125
-            B(i,j) = 125*0.5;
+    for j = 1:1:a_size(2)
+        if C(i,j) < 200
+            fprintf('%d',1);
         else
-            B(i,j) = C(i,j);
+            fprintf('%d',0);
         end
     end
+    fprintf('\n')
 end
-imshow(B)
 toc(t1)
