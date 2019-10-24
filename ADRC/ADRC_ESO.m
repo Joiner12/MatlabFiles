@@ -1,30 +1,27 @@
 function [sys,x0,str,ts,simStateCompliance] = ADRC_ESO(t,x,u,flag)
 
 switch flag
-  case 0
-    [sys,x0,str,ts,simStateCompliance]=mdlInitializeSizes;
-    
-  case 1
-    sys=mdlDerivatives(t,x,u);
-
-  case 2
-    sys=mdlUpdate(t,x,u);
-
-  case 3
-    sys=mdlOutputs(t,x,u);
-
-  case 4
-    sys=mdlGetTimeOfNextVarHit(t,x,u);
-
-  case 9
-    sys=mdlTerminate(t,x,u);
-
-  %%%%%%%%%%%%%%%%%%%%
-  % Unexpected flags %
-  %%%%%%%%%%%%%%%%%%%%
-  otherwise
-    DAStudio.error('Simulink:blocks:unhandledFlag', num2str(flag));
-
+    case 0
+        [sys,x0,str,ts,simStateCompliance]=mdlInitializeSizes;
+        
+    case 1
+        sys=mdlDerivatives(t,x,u);
+        
+    case 2
+        sys=mdlUpdate(t,x,u);
+        
+    case 3
+        sys=mdlOutputs(t,x,u);
+        
+    case 4
+        sys=mdlGetTimeOfNextVarHit(t,x,u);
+        
+    case 9
+        sys=mdlTerminate(t,x,u);
+        
+    otherwise
+        DAStudio.error('Simulink:blocks:unhandledFlag', num2str(flag));
+        
 end
 % ======================================================================
 function [sys,x0,str,ts,simStateCompliance]=mdlInitializeSizes

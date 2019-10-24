@@ -34,3 +34,19 @@ Gs = 0.00011167*(s + 33006)/(s*s + 1.245*s)
 [num,den] = tfdata(c2d(Gs,T,'tustin'),'v');
 figure(1)
 step(feedback(Gs,1))
+
+%% Classical Second Order System
+clc;
+fprintf('classical second order system\n');
+s = tf('s');
+ts = 1E-3;
+omega = 100;
+zeta = 0.2;
+Gs = omega^2/(s*s + 2*zeta*s);
+DisGs = c2d(Gs,ts,'zoh');
+[num,den] = tfdata(DisGs,'v');
+
+figure
+if true
+    step(Gs)
+end

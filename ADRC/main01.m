@@ -26,4 +26,20 @@ else
     scatter(M(:,1),M(:,2))
     grid on
 end
-    
+
+%% verify fal
+clc;
+ts = 1E-3;
+fre = 1;
+ticks = linspace(0,1,1/ts);
+U1 = sin(2*pi.*ticks);
+y = zeros(size(U1));
+
+for i = 1:1:length(ticks)
+    y(i) = Fal_Func(U1(i),0.5,0.8);    
+end
+shg;
+figure(1)
+plot(ticks,y)
+hold on 
+plot(ticks,U1)
