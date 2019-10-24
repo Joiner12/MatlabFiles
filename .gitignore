@@ -12,3 +12,6 @@ slprj/
 
 # .mat
 *.mat
+
+#.work space
+*.code-workspace
