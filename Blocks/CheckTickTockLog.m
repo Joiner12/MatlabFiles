@@ -9,48 +9,67 @@ end
     通过文档导入日志之前，使用此脚本对日志文件进行检查
 %}
 clc;clear;
-[file,path] = uigetfile('C:\Users\10520\Desktop\*.txt');
-fileIn = readtable(fullfile(path,file),'Delimiter',',');
-if isequal(file,0)
-    results = 'No File Selcet';
-else
-    results = 'Log Add by File Succeed';
-end
-%%
-clc;
-LogPath = 'D:\Codes\MatlabFiles\Blocks\TickTockFiles\Logs';
-LogPathus = LogPath;
-writeInfo = 'Succeed';
-for i = 1:1:length(fileIn.Var1)
-    % 区分大小写
-    filetxt = strcat(LogPathus,'\',datestr(fileIn.Var2(i),'yyyy-mm-dd'),'.txt');
-    
-    fileId = fopen(filetxt,'a+');
-    startTemp = datestr(fileIn.Var1(i),'yy/mm/dd HH:MM:SS');
-    finishTemp = datestr(fileIn.Var2(i),'yy/mm/dd HH:MM:SS');
 
-    formatTemp = 'hh:mm';
-    gapTemp = 0;
-    gapTemp = minutes( duration(datestr(fileIn.Var2(i),'HH:MM'),'InputFormat',formatTemp)...
-        - duration(datestr(fileIn.Var1(i),'HH:MM'),'InputFormat',formatTemp));
-%     fprintf('%s|%s|%d\n',fileIn.Var1(i),fileIn.Var2(i),gapTemp);
-    itemtemp = '';
-    detailtemp = '';
-    if isempty(fileIn.Var3{i}) || isempty(fileIn.Var4{i}) && i > 1
-        itemtemp = fileIn.Var3{i-1};
-      
-        detailtemp = fileIn.Var4{i-1};
-      
-    else
-        itemtemp = fileIn.Var3{i};
-        detailtemp = fileIn.Var4{i};
-    end
-    strrep(itemtemp,' ','');
-    strrep(detailtemp,' ','');
-%     fprintf(fileId,'%s\t|\t%s\t|\t%s\t|\t%s\t|\t%d\n',startTemp,finishTemp,itemtemp,detailtemp,gapTemp);
-    fprintf('%s\t|\t%s\t|\t%s\t|\t%s\t|\t%d\n',startTemp,finishTemp,itemtemp,detailtemp,gapTemp);
-    fclose(fileId);
-    
-    writeInfo = 'Failure';
-    
+% 导入文件
+fileopenFlag = true;
+[file,path] = uigetfile('C:\Users\10520\Desktop\*.txt');
+try
+    opt = detectImportOptions(fullfile(path,file));
+    opt.Delimiter = ',';
+    opt.VariableNames = {'starttime','endtime','item','detail'};
+    fileIn = readtable(fullfile(path,file),opt);
+catch EM
+    % 错误处理
+    results = strcat('文件打开失败:',EM.identifier);
+    fileopenFlag = false;
 end
+
+if fileopenFlag
+    NullIndex = 1;
+    for i = 1:1:length(fileIn.starttime)
+        % 区分大小写
+        LogPathus = 'C:\Users\10520\Desktop';
+        filetxt = strcat(LogPathus,'\',datestr(fileIn.starttime(i),'yyyy-mm-dd'),'.txt');
+        fileId = fopen(filetxt,'a+');
+        startTemp = datestr(fileIn.starttime(i),'yy/mm/dd HH:MM:SS');
+        finishTemp = datestr(fileIn.endtime(i),'yy/mm/dd HH:MM:SS');
+        startDay =  datestr(fileIn.starttime(i),'yy/mm/dd');
+        endDay = datestr(fileIn.endtime(i),'yy/mm/dd');
+        
+        gapTemp = 0;
+        formatTemp = 'hh:mm';
+        if isequal(startDay,endDay)
+            gapTemp = minutes( duration(datestr(fileIn.endtime(i),'HH:MM'),'InputFormat',formatTemp)...
+                - duration(datestr(fileIn.starttime(i),'HH:MM'),'InputFormat',formatTemp));
+        else
+            gapTemp1 = minutes( duration('23:59','InputFormat',formatTemp)...
+                - duration(datestr(fileIn.starttime(1),'HH:MM'),'InputFormat',formatTemp));
+            gapTemp2 = minutes( duration(datestr(fileIn.endtime(1),'HH:MM'),'InputFormat',formatTemp)...
+                - duration('00:01','InputFormat',formatTemp));
+            gapTemp = gapTemp1 + gapTemp2;
+        end
+        itemtemp = fileIn.item{i};
+        detailtemp = fileIn.detail{i};
+        % item缺失则表示同上条
+        if isempty(itemtemp)
+            itemtemp = fileIn.item{NullIndex};
+            detailtemp = fileIn.detail{NullIndex};
+        else
+            NullIndex = i;
+        end
+        % detail缺失则将item复制
+        if isempty(detailtemp)
+            detailtemp = itemtemp;
+        end
+        strrep(itemtemp,' ','');
+        strrep(detailtemp,' ','');
+        fprintf(fileId,'%s\t|\t%s\t|\t%s\t|\t%s\t|\t%d\n',startTemp,finishTemp,itemtemp,detailtemp,gapTemp);
+        %         fprintf('%s\t|\t%s\t|\t%s\t|\t%s\t|\t%d\n',startTemp,finishTemp,itemtemp,detailtemp,gapTemp);
+        fclose(fileId);
+        writeInfo = 'Failure';
+    end
+end
+
+%% 检查datepicker
+DatePicker = uidatepicker();
+datetime('now')
