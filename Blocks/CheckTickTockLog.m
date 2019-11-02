@@ -6,6 +6,8 @@ if ~isequal('D:\Codes\MatlabFiles\Blocks',pwd)
 end
 %%
 %{
+
+
     通过文档导入日志之前，使用此脚本对日志文件进行检查
 %}
 clc;clear;
