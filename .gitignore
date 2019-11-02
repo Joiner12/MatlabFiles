@@ -4,7 +4,7 @@
 # No track D:/Codes/MatlabFiles/Blocks/TickTockFiles
 TickTockFiles/
 
-# no track 
+# file folder
 MusicVisual/
 SysModel_grt_rtw/
 slprj/
@@ -15,3 +15,9 @@ slprj/
 
 #.work space
 *.code-workspace
+
+#.auto save 
+*.asv
+
+#.fig
+*.fig
