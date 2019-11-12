@@ -2,7 +2,7 @@
 clc;
 fprintf("load path...\n%s\n",pwd);
 if ~isequal(pwd,'D:\Codes\MatlabFiles\Blocks')
-    cd(ScirptPath);
+    cd('D:\Codes\MatlabFiles\Blocks');
 end
 %%
 %{

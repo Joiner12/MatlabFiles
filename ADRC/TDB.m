@@ -1,26 +1,18 @@
 % 微分跟踪器
 %{
-    函数说明：
-    @funcname:ADRC_TD
-    1.从带噪声信号中提取原始信号，以及高阶段信号;
-    3.微分跟踪器采用最速综合函数原理实现;
-
-    @parameter:p1 最速综合函数fst_m中delta
-    @parameter:p2 fst_m中h
-    @parameter:u 输入跟踪信号
-    @parameter:t 采样周期
-
+    复合微分跟踪器(Compound TD)
+    
     reference：
-    [1] 韩京清，武利强，TD滤波器及其应用
+    [1]劳立明，陈英龙，赵玉刚等，跟踪微分器的等效线性分析及优化，浙江大学学报(工学版)，2018，52（02），224-232
 %}
-function [sys,x0,str,ts] = ADRC_TD(t,x,u,flag,p1,p2)
+function [sys,x0,str,ts] = TDB(t,x,u,flag,p1,p2,p3)
 switch flag
     case 0
         [sys,x0,str,ts] = mdlInitializeSizes;
     case 2
-        sys = mdlUpdate(t,x,u,p1,p2);
+        sys = mdlUpdate(t,x,u,p1,p2,p3);
     case 3
-        sys=mdlOutputs(t,x,u);
+        sys = mdlOutputs(t,x,u);
     case{1,4,9}
         sys = [];
 
@@ -34,24 +26,26 @@ sizes = simsizes;
 sizes.NumContStates  = 0;
 sizes.NumDiscStates  = 2;
 sizes.NumOutputs     = 2;
-sizes.NumInputs      = 1;
+sizes.NumInputs      = 2;
 sizes.DirFeedthrough = 1;
 sizes.NumSampleTimes = 1;   % at least one sample time is needed
 sys = simsizes(sizes);
 x0  = [0,0];
+u = [0,0]
 str = [];
 ts  = [1e-3 0];
 
 %=============================================================================
-function sys = mdlUpdate(~,x,u,p1,p2)
+function sys = mdlUpdate(~,x,u,p1,p2,p3)
 T = 1e-3;
-vt = u;
+vt = u(1);
+v1 = u(2);
 % T一般取5~10
 h = p1*T;
 delta = p2;
 
 x(1) = x(1) + T*x(2);
-x(2) = x(2) + T*fst_m(vt,x(1),x(2),delta,h);
+x(2) = x(2) + T*fst_m(vt,x(1),x(2),delta,h) + p3*v1;
 
 sys = [x(1),x(2)];
 
