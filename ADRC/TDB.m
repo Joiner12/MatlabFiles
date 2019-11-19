@@ -31,7 +31,7 @@ sizes.DirFeedthrough = 1;
 sizes.NumSampleTimes = 1;   % at least one sample time is needed
 sys = simsizes(sizes);
 x0  = [0,0];
-u = [0,0]
+u = [0,0];
 str = [];
 ts  = [1e-3 0];
 
@@ -45,7 +45,7 @@ h = p1*T;
 delta = p2;
 
 x(1) = x(1) + T*x(2);
-x(2) = x(2) + T*fst_m(vt,x(1),x(2),delta,h) + p3*v1;
+x(2) = x(2) + T*fst_m(vt,x(1),x(2),delta,h) + T*p3*v1;
 
 sys = [x(1),x(2)];
 
