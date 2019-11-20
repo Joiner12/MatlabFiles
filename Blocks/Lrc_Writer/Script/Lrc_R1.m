@@ -1,5 +1,5 @@
 %%
-Filepath = 'D:\Codes\MatlabFiles\Blocks';
+Filepath = 'D:\Codes\MatlabFiles\Blocks\Lrc_Writer\Script';
 cd(Filepath)
 %%
 clc;clear;

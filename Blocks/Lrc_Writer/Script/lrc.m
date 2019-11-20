@@ -5,9 +5,9 @@ global lrcs;
 lrcs = strings(0);
 lrcSrcPath = strings(0);
 %------------%
-dir_lrc = dir('C:\Users\10520\Desktop\ned');
+dir_lrc = dir('D:\Codes\MatlabFiles\Blocks\Lrc_Writer\Srcs\ned');
 
-filepath = 'C:\Users\10520\Desktop\ned';
+filepath = 'D:\Codes\MatlabFiles\Blocks\Lrc_Writer\Srcs\ned';
 dir_path = dir(filepath);
 if length(dir_path) < 2
     fprintf('dong dong dong /...\n');
