@@ -28,13 +28,15 @@ load('H:\MatlabFiles\ADRC\Scripts\sstep.mat');
 clc;
 T = 5e-4;
 s = tf('s');
-tf_ob = (16.75)/(s + 0.5)
-sys = ss(tf_ob);
+tf_ob = (16.75)/(s + 0.5);
+if true
+sys = ss(tf_ob)
 [num,den] = tfdata(c2d(tf_ob,T*2,'zoh'),'v')
+% transfer function to space state 
+else
+    [A,B,C,D] = tf2ss([0 0 16.7],[1 0.5 0])
+end
 
-%
-figure(1)
-step(feedback(sys,1))
 
 %%
 %{

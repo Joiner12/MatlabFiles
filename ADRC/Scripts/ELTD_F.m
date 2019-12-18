@@ -5,6 +5,7 @@
     2.得出不同非线性函数的等效线性模型,通过不同参数设置决定具体微分跟踪器形式；
     3.扩展复合微分跟踪器，利用前馈补偿原理减少相位差；
 
+
     @param:R
     @param:k1
     @param:k2
@@ -57,15 +58,29 @@ sys = simsizes(sizes);
 x0  = [0,0,0];
 str = [];
 u = [0,0];
-ts  = [1e-3 0];
+ts  = [5e-4 0];
 % end mdlInitializeSizes
 
 % ==========================================================================
 function sys = mdlUpdate(~,x,u,k1,k2,R,ForCof)
-T = 1e-3;
+T = 5e-4;
 vt = u(1);
 v_f = u(2);
 
+%{
+    % 调试模式验证输入输出demux mux功能
+    models = ["debug","forward","general"];
+
+    model = models(1);
+    switch model
+        case "forward"
+
+        case "general"
+
+        case "debug"
+
+    end
+%}
 forwardComp = true;
 if forwardComp
     % 带前馈补偿
@@ -85,12 +100,11 @@ else
     x(1) = x(1) + T*x(2);
     err_1 = x(1) - vt; % x1(k) - v(k)
     x(2) = x(2) + T*(-k1*err_1 - k2*x(2)/R)*R^2;
+    x(3) = 0;
 end
 
-sys = [x(1),x(2),x(3)]
+sys = [x(1),x(2),x(3)];
 
 % ==========================================================================
 function sys = mdlOutputs(~,x,~)
 sys = [x(1),x(2)];
-
-
