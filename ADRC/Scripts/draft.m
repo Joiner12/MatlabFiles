@@ -153,3 +153,16 @@ legend('origin','track','diff')
 %% 仿真数据,from workspace 拼接
 ELDT_SimData = [(2e-3).*VarName1,VarName2]
 
+
+%% 
+h = animatedline('MaximumNumPoints',100);
+axis([0,4*pi,-1,1])
+
+x = linspace(0,4*pi,1000);
+y = sin(x);
+for k = 1:length(x)
+    addpoints(h,x(k),y(k));
+    drawnow limitrate 
+    pause(0.01)
+end
+cla
