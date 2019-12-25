@@ -53,3 +53,8 @@ slprj/
 
 #..code-workspace
 *.code-workspace
+
+# ecg docs
+D:/Codes/MatlabFiles/Blocks/ECG/ECG.doc
+D:/Codes/MatlabFiles/Blocks/ECG/ECG.pdf
+D:/Codes/MatlabFiles/Blocks/ECG/license.txt
