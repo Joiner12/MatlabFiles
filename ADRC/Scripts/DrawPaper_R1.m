@@ -102,7 +102,7 @@ plot(trackout.time,trackout.data(:,3))
 legend('含噪原始信号','复合微分跟踪器','经典微分跟踪器')
 title('跟踪信号')
 grid minor
-xlabel('time/s');ylabel('height/mm');
+xlabel('Time(s)');ylabel('Speed(mm/s)');
 subplot(212)
 plot(diffout.time,diffout.data(:,1))
 hold on 
@@ -110,60 +110,66 @@ plot(diffout.time,diffout.data(:,2))
 legend('复合微分跟踪器','经典微分跟踪器')
 title('微分信号')
 grid minor
-xlabel('time/s');ylabel('height/mm');
+xlabel('Time(s)');ylabel('Speed(mm/s)');
 
 %% final version
 %% 实测数据处理
 figure
 subplot(211)
-p1 = plot((tick_1(324:941) - tick_1(324))/1000,VarName2_1(324:941));
-p1.LineWidth = 1;
+p1 = plot((tick_1(324:941) - tick_1(324)),VarName2_1(324:941));
+p1.LineWidth = 1.5;
 hold on
-p2 = plot((tick_1(324:941) - tick_1(324))/1000,VarName3_1(324:941));
-p2.LineWidth = 1;
+p2 = plot((tick_1(324:941) - tick_1(324)),VarName3_1(324:941));
+p2.LineWidth = 1.5;
 hold on
-p3 = plot((tick_1(324:941) - tick_1(324))/1000,VarName5_1(324:941));
-p3.LineWidth = 1;
-legend('原始','前馈跟踪','典型跟踪')
+p3 = plot((tick_1(324:941) - tick_1(324)),VarName5_1(324:941));
+p3.LineWidth = 1.5;
+legend('原始信号','复合跟踪微分器','经典跟踪微分器')
 title('跟踪信号')
 grid minor
-xlabel('time/s');ylabel('height/mm');
+xlabel('Time(s)');ylabel('Height(mm)');
 subplot(212)
-p4 = plot((tick_1(324:941) - tick_1(324))/1000,VarName4_1(324:941));
-p4.LineWidth = 1;
+p4 = plot((tick_1(324:941) - tick_1(324)),VarName4_1(324:941));
+p4.LineWidth = 1.5;
 hold on
-p5 = plot((tick_1(324:941) - tick_1(324))/1000,VarName7_1(324:941));
-p5.LineWidth = 1;
-legend('forward','noforward')
+p5 = plot((tick_1(324:941) - tick_1(324)),VarName7_1(324:941));
+p5.LineWidth = 1.5;
+legend('复合跟踪微分器','经典跟踪微分器')
 grid minor
-xlabel('time/s');ylabel('height/mm');
+xlabel('Time(s)');ylabel('Speed(mm/s)');
 title('微分信号')
 
 %% 仿真数据处理2
+close all
 figure
 subplot(211)
-p6 = plot(trackout.time(1:2000),trackout.data(1:2000,1));
-p6.LineWidth =1;
-hold on 
-p7 = plot(trackout.time(1:2000),trackout.data(1:2000,2));
-p7.LineWidth = 1;
+p6 = plot(trackout.time(1:4001),trackout.data(1:4001,1));
+p6.LineWidth = 1.8;
+p6.Color = 'red';
 
 hold on 
-p8 = plot(trackout.time(1:2000),trackout.data(1:2000,3));
-p8.LineWidth  =1;
-legend('含噪原始信号','复合微分跟踪器','经典微分跟踪器')
+p7 = plot(trackout.time(1:4001),trackout.data(1:4001,2));
+p7.LineWidth = 0.8;
+p7.LineStyle = '--';
+p7.Color = 'blue';
+hold on 
+p8 = plot(trackout.time(1:4001),trackout.data(1:4001,3));
+p8.LineWidth  = 1.8;
+p8.Color = 'black';
+p8.LineStyle = ':';
+legend('复合微分跟踪器','含噪原始信号','经典微分跟踪器')
 title('跟踪信号')
 grid minor
-xlabel('time/s');ylabel('height/mm');
+xlabel('Time(s)');ylabel('');
 subplot(212)
-p9 = plot(diffout.time(1:2000),diffout.data(1:2000,1));
-p9.LineWidth=1;
+p9 = plot(diffout.time(1:4001),diffout.data(1:4001,1));
+p9.LineWidth=1.5;
 hold on 
-p10 = plot(diffout.time(1:2000),diffout.data(1:2000,2));
-p10.LineWidth=1;
+p10 = plot(diffout.time(1:4001),diffout.data(1:4001,2));
+p10.LineWidth=1.5;
 legend('复合微分跟踪器','经典微分跟踪器')
 title('微分信号')
 grid minor
-xlabel('time/s');ylabel('height/mm');
-
+xlabel('Time(s)');ylabel('');
+% xlabel('Time(s)');ylabel('Speed(mm/s)');
 
