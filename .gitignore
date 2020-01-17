@@ -67,3 +67,17 @@ ADRC/Scripts/SimuDraft_grt_rtw/
 Blocks/DataAnlysis_R1_1.7z
 Blocks/requiredMCRProducts.txt
 
+# untrack files
+DetectEdge/
+FrequencyObserver/
+InterPre/
+KalmanVirbrate/
+Lrc/
+Vibrate/
+WavePanel/
+切换条件/
+hCompare/
+hSwitchCondition/
+
+D:/Codes/MatlabFiles/切换条件
+
