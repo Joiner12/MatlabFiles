@@ -29,7 +29,8 @@ if false
 end
 
 %% 初始化变量。
-filename = 'C:\Users\Whtest\Desktop\新建文本文档.txt';
+% filename = 'C:\Users\Whtest\Desktop\新建文本文档.txt';
+filename = 'H:\MatlabFiles\ADRC\Data\realtime.txt';
 delimiter = ',';
 
 %% 每个文本行的格式:
@@ -66,7 +67,7 @@ VarName4 = dataArray{:, 4};
 VarName5 = dataArray{:, 5};
 VarName6 = dataArray{:, 6};
 VarName7 = dataArray{:, 7};
-lins = ["time","caph","x1","x2","x3","track","ctrl"];
+lins = ["time","capheight","x1","x2","target","track","encoder"];
 %% 清除临时变量
 clearvars filename delimiter formatSpec fileID dataArray ans;
 %%
@@ -76,7 +77,7 @@ catch
     fprintf('it seems no such figure opened\n');
 end
 figure('name','gh')
-subplot(221)
+subplot(321)
 plot(VarName1,VarName2,'LineWidth',1.0)
 hold on
 plot(VarName1,VarName3,'LineWidth',1.1)
@@ -86,33 +87,63 @@ hold on
 plot(VarName1,VarName5,'LineWidth',1.3)
 hold on
 plot(VarName1,VarName6,'LineWidth',1.4)
+hold on
+plot(VarName1,VarName7,'LineWidth',1.4)
+grid minor
 % legend('1','2','3','4','5')
-legend(lins(2:6))
+legend(lins(2:7))
 
-subplot(222)
+
+
+subplot(322)
 plot(VarName1/2000,VarName2,'LineWidth',1.0)
 hold on
 plot(VarName1/2000,VarName3,'LineWidth',1.1)
 hold on
+plot(VarName1/2000,VarName5,'LineWidth',1.3)
+hold on
 plot(VarName1/2000,VarName6,'LineWidth',1.3)
-legend([lins(2:3),lins(6)])
+grid minor
+legend([lins(2:3),lins(5:6)])
 
-subplot(223)
+subplot(323)
 plot(VarName1,VarName3,'LineWidth',1.0)
 hold on
 plot(VarName1,VarName7,'LineWidth',1.1)
+grid minor
 legend(lins(3),lins(7))
 
-subplot(224)
-if true
-    plot(VarName1,VarName2,'LineWidth',1.0)
+subplot(324)
+if false
+    plot(VarName1,VarName5,'LineWidth',1.0)
     hold on
-    plot(VarName1,VarName5,'LineWidth',1.1)
-    legend(lins(4),lins(5))
+    plot(VarName1,VarName6,'LineWidth',1.1)
+    hold on 
+    plot(VarName1,VarName7,'LineWidth',1.2)
+    legend([lins(2),lins(6:7)])
+    grid minor
 else
-    % plot(VarName1,VarName6,'LineWidth',2,'LineStyle','-')
-    % hold on 
+    plot(VarName1,VarName4,'LineWidth',1.5,'LineStyle','-')
+    hold on 
     plot(VarName1,VarName7,'LineWidth',1.2)
     grid minor
-    title(lins(7))
+    legend([lins(4),lins(7)])
+end
+
+subplot(325)
+plot(VarName1,VarName7./1000,'LineWidth',1)
+grid minor
+legend(lins(7))
+ylabel('MM')
+
+subplot(326)
+if mod(100*rand,2)==0
+    a=rand(40,40);
+    image(a,'CDataMapping','scaled');
+    colorbar off
+else
+    impath = 'H:\MatlabFiles\ADRC\Docs\figures';
+    pages = dir(impath);
+    showpng = fullfile(impath,pages(randi([3,length(pages)])).name);
+    imshow(showpng)
 end

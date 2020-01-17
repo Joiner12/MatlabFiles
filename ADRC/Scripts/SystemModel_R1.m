@@ -30,9 +30,9 @@ T = 5e-4;
 s = tf('s');
 tf_ob = (16.75)/(s + 0.5);
 if true
-sys = ss(tf_ob)
-[num,den] = tfdata(c2d(tf_ob,T*2,'zoh'),'v')
-% transfer function to space state 
+    sys = ss(tf_ob)
+    [num,den] = tfdata(c2d(tf_ob,T*2,'zoh'),'v')
+    % transfer function to space state
 else
     [A,B,C,D] = tf2ss([0 0 16.7],[1 0.5 0])
 end
@@ -52,9 +52,10 @@ s = tf('s');
 Gs = 0.00011167*(s + 33006)/(s*s + 1.245*s)
 % Gs = 100/(s+1)
 [num,den] = tfdata(c2d(Gs,T,'tustin'),'v')
-figure(1)
-step(feedback(Gs,1))
-
+if false
+    figure(1)
+    step(feedback(Gs,1))
+end
 
 %% State Space  System Model
 %{
@@ -83,15 +84,16 @@ plot(tick,ssfy)
 clc;
 fprintf('system model ver3\n');
 s = tf('s');
-ts = 1e-3;
+ts = 5e-4;
 omega = 100;
 ipselong = 0.2;
 Gs = omega^2/(s^2 + 2*omega*ipselong*s);
 DisGs = c2d(Gs,ts);
 [num,den] = tfdata(DisGs,'v')
 
-figure(1)
-if true
+
+if false
+    figure(1)
     % step(Gs)
     %     step(feedback(Gs,1))
     bode(feedback(Gs,1))

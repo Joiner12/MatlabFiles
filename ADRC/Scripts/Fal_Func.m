@@ -19,7 +19,7 @@
 
     reference:
     [1]http://kzyjc.alljournals.cn/ch/reader/create_pdf.aspx?file_no=20181023&year_id=2018&quarter_id=10&falg=1
-    [2]《基于fat函数滤波的改进自抗扰技术的实现》.吕永佳
+    [2]《基于fal函数滤波的改进自抗扰技术的实现》.吕永佳
 
 %}
 function y = Fal_Func(e,alpha,delta)
@@ -36,13 +36,15 @@ end
 switch length(e)
     case 0
         error('fal函数无处理数据输入');
+        
     case 1
-        if abs(e) <= delta
+        if abs(e) < delta
             temp = e/power(delta,1-alpha);
         else
             temp = power(abs(e),alpha)*sign(e);
         end
         y = temp;
+        
     otherwise
         % 处理数组数据
         e_length = length(e);
@@ -51,11 +53,12 @@ switch length(e)
         % 输入需要单独进行比较，因此采用for循环
         for i=1:1:e_length
             if abs(e(i)) <= delta
-                temp = e(i)/power(delta,1-alfa);
+                temp = e(i)/power(delta,1-alpha);
             elseif abs(e(i)) > delta
-                temp = power(abs(e(i)),alfa)*sign(e(i));
+                temp = power(abs(e(i)),alpha)*sign(e(i));
             end
             final(i) = temp;
         end
+        y = final;
 end
 end

@@ -7,14 +7,14 @@
     @Funcname:扩张观测器
     @param:beta1,观测器系数
     @param:beta2,观测器系数
-
+    
     reference:
     [1] 线性ADRC参数整定 https://blog.csdn.net/handsome_for_kill/article/details/88398467
     [2] 纪恩庆, 肖维荣. 二阶自抗扰控制器的参数简化[J]. 自动化仪表, 2007, 28(5).
     [3] H:\MatlabFiles\ADRC\Scripts\SystemModel_R1.m
     [4] Active disturbance rejection control:some recent experimental and industrial case studies
     [5] Linear inverted pendulum control based on improved ADRC
-    [6] Analysis and Design of a Time-Varying Extended State Observer for a Class of 
+    [6] Analysis and Design of a Time-Varying Extended State Observer for a Class of
         Nonlinear Systems with Unknown Dynamics Using Spectral Lyapunov Function
     [7] 线性自抗扰控制参数整定鲁棒性的根轨迹分析
 
@@ -28,7 +28,7 @@ switch flag
         [sys,x0,str,ts] = mdlInitializeSizes;
         
     case 2
-        sys = mdlUpdate(t,x,u,beta1,beta2); 
+        sys = mdlUpdate(t,x,u,beta1,beta2);
         
     case 3
         sys = mdlOutputs(t,x,u);
@@ -65,23 +65,18 @@ ts  = [5e-4 0];
     过程向量:x = [z1(k),z2(k)];
     输入向量:u = [y(k),u(k)];
     输出向量:x = [z1(k+1),z2(k+1)];
+    控制器阶数降维
 %}
 function sys = mdlUpdate(t,x,u,beta1,beta2)
 T = 5e-4;
 h = T;
-e = x(1) - u(2);
+e = u(2)- x(1);
 % z = [z1(k),z2(k)];
 z = zeros(1,2);
-Continuous_Sys = false;
-if Continuous_Sys
-    % 连续形式
-    z1 = x(2) - beta1*e + u(2);
-    z3 = -beta3*e;
-    x = [z1,z2];
-else
-    z(1) = x(1) + h*(x(2) - beta1*e + u(1));
-    z(2) = x(2) - h*beta2*e;
-end
+
+z(1) = x(1) + h*(x(2) + beta1*e + u(1));
+z(2) = x(2) + h*beta2*e;
+
 x(1) = z(1);
 x(2) = z(2);
 

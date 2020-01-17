@@ -1,3 +1,12 @@
+clc;clear;
+if ~isequal(pwd,'H:\MatlabFiles\ADRC\Scripts')
+    cd H:\MatlabFiles\ADRC\Scripts
+end
+fprintf('Load path...\n%s\n',pwd);
+%% get eso parameters
+cof = GetAlpha(1,2)
+
+%%
 function GetESO()
 %{
     ¦Â1 = 3*¦Ø0£¬¦Â2 = 3*¦Ø0^2 ¦Â3 = ¦Ø0^3,¦Ø0ÊÇ¹Û²âÆ÷´ø¿í(rad/s)£¬
