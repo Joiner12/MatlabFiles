@@ -1,5 +1,5 @@
 clc;
-ScriptPath = 'H:\MatlabFiles\Blocks';
+ScriptPath = 'D:\Codes\MatlabFiles\Blocks';
 if ~isequal(ScriptPath,pwd)
     cd(ScriptPath);
 end

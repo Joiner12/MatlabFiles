@@ -33,7 +33,7 @@ signal_fre = 5;  % hz'
 sample_fre = 1000; % hz'
 v = zeros(0);
 %----------信号源----------%
-SIGNAL = 1;
+SIGNAL = 4;
 switch SIGNAL
     case 1
         fprintf('signal: %d -> 噪声+正弦\n',SIGNAL);
@@ -50,6 +50,8 @@ switch SIGNAL
                 v(i) = 10;
             end
         end
+    case 4
+        [v,n] = stepseq(10,1,200);
 end
 %----------仿真过程----------%
 OptCnt = 0;
@@ -58,7 +60,7 @@ x2 = zeros(200,1);
 % diff_theroyvalue = 10*cos(2*pi*signal_fre.*t/sample_fre);
 diff_theroyvalue_1 = diff(v)*sample_fre;%sample_fre;
 diff_theroyvalue_2 = 10*2*pi*signal_fre*cos(2*pi*signal_fre.*t/sample_fre);
-h1 = 0.01; r = 10000;
+h1 = 0.005; r = 1000;
 while OptCnt < length(t)
     OptCnt = OptCnt + 1;
     if OptCnt > 1
@@ -69,18 +71,32 @@ end
 
 % figure
 close all;
-figure(1)
-plot(v,'Color','g','LineWidth',1.2,'LineStyle','--')
-hold on 
-plot(x1,'Color','r','LineWidth',1.2)
-hold on 
-plot(x2,'Color','b','LineWidth',1.2)
-hold on 
-plot(diff_theroyvalue_1./300,'Color','c','LineWidth',1.2)
-hold on
-plot(diff_theroyvalue_2./300)
-grid on
-legend('原始','跟踪信号','提取微分信号','理论微分值/300','差分计算微分值/300')
+if 0
+    figure(1)
+    plot(v,'Color','g','LineWidth',1.2,'LineStyle','--')
+    hold on 
+    plot(x1,'Color','r','LineWidth',1.2)
+    hold on 
+    plot(x2,'Color','b','LineWidth',1.2)
+    hold on 
+    plot(diff_theroyvalue_1./300,'Color','c','LineWidth',1.2)
+    hold on
+    plot(diff_theroyvalue_2./300)
+    grid on
+    legend('原始','跟踪信号','提取微分信号','理论微分值/300','差分计算微分值/300')
+elseif 0
+    
+else
+    figure(1)
+    plot(v,'Color','g','LineWidth',1.2)
+    hold on 
+    plot(x1,'Color','r','LineWidth',1.2)
+    ylim([0 1.2]);
+    legend('原始-阶跃','跟踪输出')
+    grid minor
+    xlabel('时间/(ms)')
+    ylabel('高度/(mm)')
+end
 % legend('原始','跟踪信号','提取微分信号','理论微分值')
 
 %% 函数模块
@@ -172,6 +188,15 @@ function y = SatV2(x,delta)
         y_temp = x./delta;
     end
     y = y_temp;
+end
+
+%% 2. 单位阶跃序列
+% ns=序列的起点；nf=序列的终点
+% n0=从n0处开始生成单位阶跃序列
+% x=产生的单位阶跃序列； n=产生序列的位置信息
+function[x,n] = stepseq(n0,ns,nf)
+n = [ns:nf];
+x = [(n-n0)>=0];
 end
 
 

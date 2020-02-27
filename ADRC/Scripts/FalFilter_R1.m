@@ -2,7 +2,7 @@
 clc;clear;
 CurPath = pwd;
 % if CurPath == TargetPath
-if strcmp(CurPath,'H:\MatlabFiles\ADRC\Scripts')
+if strcmp(CurPath,'D:\Codes\MatlabFiles\ADRC\Scripts')
     fprintf('Path...%s\t\n%s\n',pwd,'ADRC');
 else
     cd H:\MatlabFiles\ADRC\Scripts
