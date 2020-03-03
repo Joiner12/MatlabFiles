@@ -21,7 +21,8 @@ global linebuff;
 global log_period_t;
 
 fig = figure('units','normalized','position',[.2 .2 .6 .6],'name','Log Checker','numbertitle','off','color','w');
-axes('units','normalized','position',[.05 .07 .9 .7]);
+ax_1 = axes('units','normalized','position',[.05 .07 .4 .4]);
+ax_2 = axes('units','normalized','position',[.5 .07 .4 .4]);
 grid on;
 xlabel('time (s)')
 
