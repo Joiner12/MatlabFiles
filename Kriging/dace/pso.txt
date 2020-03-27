@@ -1,0 +1,3 @@
+options = psooptimset('Algorithm', 'active-set')
+options.ConstrBoundary='absorb';
+[x,fval,exitflag,output]=pso(@objfun,11,[],[],[],[],lob1,upb1,@const,options)
