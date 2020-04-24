@@ -1,14 +1,14 @@
 %%
 tic
 clc
-cd D:\Coders\MatlabScrips\KalmanFilter
+cd D:\Codes\MatlabFiles\KalmanFilter
 fprintf('load path\t%s\n',pwd)
 clear
 N=200;
 w=randn(1,N); 
 w(1)=0;
 Q=var(w); 
-v=randn(1,N);%æµ‹é‡å™ªå£°
+v=randn(1,N);% Ğ­·½²î
 R=var(v);
 x_true(1)=0;
 A=1;

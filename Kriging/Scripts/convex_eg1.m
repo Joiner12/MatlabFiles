@@ -4,7 +4,7 @@ s=load('s.mat');
 s=s.s;
 ss=load('ss.mat');
 ss=ss.ss;
-ys=load('ys.mat')
+ys=load('ys.mat');
 ys=ys.ys;
 yss=load('yss.mat');
 yss=yss.yss;
@@ -19,8 +19,8 @@ lob = ones(1,varnum)*1E-10;
 upb = ones(1,varnum)*5;
 method=4;
 maxEII=zeros(150,1);
-% [dmodel1,perf]=dacefit(x_Ini,y_Ini,@regpoly0, @corrgauss, theta, lob, upb,method);
-[dmodel1,perf]=dacefit(x_Ini,y_Ini,@regpoly0, @corrgauss, theta, lob, upb);
+% [dmodel1,perf] = dacefit(x_Ini,y_Ini,@regpoly0, @corrgauss, theta, lob, upb,method);
+[dmodel1,perf] = dacefit(x_Ini,y_Ini,@regpoly0, @corrgauss, theta, lob, upb);
 num=1E5;
 a=zeros(num,1);
 c=zeros(num,1);
@@ -62,7 +62,7 @@ sigmag=sigmag.^0.5;
         end
    
 end
-initial_add_point=x_Ini;
-initial_add_value=y_Ini;
-dmodel2=dmodel1;
+initial_add_point = x_Ini;
+initial_add_value = y_Ini;
+dmodel2 = dmodel1;
 end

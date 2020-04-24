@@ -1,8 +1,8 @@
 %%  
 clc;clear;
-Path = 'D:\Coders\MatlabScrips\KalmanFilter';
+Path = 'D:\Codes\MatlabFiles\KalmanFilter';
 if ~strcmp(pwd,Path)
-    cd D:\Coders\MatlabScrips\KalmanFilter 
+    cd D:\Codes\MatlabFiles\KalmanFilter
 end
 fprintf('Load Path\t%s\n',Path);
 clear Path
@@ -44,6 +44,7 @@ for i=1:1:length(datafile)
 end
 
 
+%%
 % search out users info
 clc
 userslink = {};
