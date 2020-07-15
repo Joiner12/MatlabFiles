@@ -97,3 +97,8 @@ PipeVibrate/
 # figures
 *.gif
 
+# video format
+*.mp4
+*.avi
+.gitignore
+
