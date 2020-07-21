@@ -103,6 +103,10 @@ if (event_obj.Key == 'q')
     close(obj);
     return;
 end
+%---debugline
+fprintf('event_obj.key:%s\n',event_obj.Key);
+%---debugline
+
 % Update the userdata in the object
 myData = get(obj, 'UserData');
 if (myData.pressDown == 0)          % if mouse is not pressed
@@ -143,7 +147,10 @@ if (myData.pressDown == 0)          % if mouse is not pressed
     se = strel('disk',5);
     Mc = imerode( Mc,se);
     % Call the PIE function.  It will returned the integrated image
+    %---debugline
+    a = tic;
     newI = PIE( TRG,SRC,Mc,myData.Method,myData.Color);
+    toc(a);
     %reconstruct
     if size(newI,3)==1
         DEST=rgb2gray(DEST);

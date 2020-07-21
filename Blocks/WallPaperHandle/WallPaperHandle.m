@@ -24,14 +24,3 @@ subplot(223)
 imshow(Pic_C)
 subplot(224)
 imshow(Pic_D)
-
-%%
-%Demo
-% T3 Demo code
-%q
-source='wx2.jpg';
-target='2.jpg';
-result='result2.jpg';
-I1 = imread(source);            % SOURCE IMAGE
-I2 = imread(target);        % DESTINATION IMAGE
-PIE_Gui(I1,I2,result,1,0);
