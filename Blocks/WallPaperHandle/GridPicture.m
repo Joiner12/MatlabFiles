@@ -14,30 +14,40 @@ end
 rows = gridTemp(1);
 cols = gridTemp(2);
 row_width = 10;
-col_width = row_width*screen(1)/screen(2);
-
-% get ancle
-
-for i=1:1:rows
-    for j=1:1:cols
-        
-    end
-end
+col_width = row_width;
+% col_width = 5*screen(1)/screen(2);
 
 [A,map] = imread(pic);
 
+%% array
 A_size = size(A);
-GridR1 = [0,A_size(1)/2 - row_width/2,A_size(2),row_width];
-GridR2 = [0,2*A_size(1)/3 - 5,A_size(2),10];
-if true
-    GridR3 = [A_size(2)/2 - row_width/2,0,row_width,A_size(1)];
-else
-    GridR3 = [A_size(2)/2 - col_width/2,0,col_width,A_size(1)];
+% get anchor
+if true && false
+    frectangle = zeros((rows-1)*(cols-1),4);
+    frectCount = 0;
+    for j=1:1:cols-1
+        for i=1:1:rows-1
+            frectCount = frectCount + 1;
+            %[x,y,w,h]
+            frectangle(frectCount,:) = [i*A_size(1)/(rows),...
+                j*(A_size(2)/cols),...
+                A_size(2),...
+                0];
+        end
+    end
 end
 
-GridR4 = [2*A_size(2)/4 - 5,0,5,A_size(1)];
-GridR5 = [3*A_size(2)/4 - 5,0,5,A_size(1)];
-GridR = [GridR1;GridR3];
+%% cat 
+if true
+    GridR1 = [0,A_size(1)/2 - 5,A_size(2),10];
+    % GridR2 = [0,2*A_size(1)/3 - 5,A_size(2),10];
+    GridR3 = [A_size(2)/4 - 5,0,5,A_size(1)];
+    GridR4 = [2*A_size(2)/4 - 5,0,10,A_size(1)];
+    GridR5 = [3*A_size(2)/4 - 5,0,5,A_size(1)];
+    % GridR = [GridR1;GridR3;GridR4;GridR5];
+    GridR = [GridR1;GridR4];
+end
+
 GrColor = 'white';
 B = insertShape(A,'FilledRectangle',GridR,'Color',{'white'});
 imot = '';
@@ -50,5 +60,6 @@ try
 catch
     error('gird picture failed');
 end
+fprintf('Grid picture finished\n');
 % imtool(B)
 end

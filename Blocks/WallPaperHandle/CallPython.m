@@ -28,8 +28,8 @@ result='result3.jpg';
 I1 = imread(source);            % SOURCE IMAGE
 I2 = imread(target);        % DESTINATION IMAGE
 PIE_Gui(I1,I2,result,1,0);
+fprintf('finished\n')
 
-%%
 CatPicture('result3.jpg')
 %%
 function pathInsert(tarPath,handleMode)
