@@ -22,3 +22,20 @@ pic_2  = insertText(pic_2,[int32(sizePic(2)/2),int32(sizePic(1)/2)],strText,...
 imshow(pic_2);
 
 
+%%
+clc;
+video_file = 'C:\Users\10520\Desktop\fashou.mp4';
+GifMake.CutFromVideo('hua.gif',video_file);
+%%
+tcf();
+clc;
+clear;
+Lovinu = ["我爱你","无畏人海的拥挤","用尽余生的勇气",...
+    "只为能靠近你","哪怕一厘米","爱上你",...
+    "是我落下的险棋","不惧岁月的更替","往后的朝夕"];
+A = imread('fashou29-b.png');
+B = insertText(A,[200 300],char(Lovinu(end-2)),'FontSize',100,...
+    'Font','SimSun','TextColor',[189,32,32],...
+    'AnchorPoint','LeftBottom',...
+    'BoxColor',[0.94,0.92,0.92],'BoxOpacity',0.0);
+imshow(B)

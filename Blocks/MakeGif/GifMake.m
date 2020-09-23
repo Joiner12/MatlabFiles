@@ -2,9 +2,10 @@
 classdef GifMake
     methods (Static)
         % from gif to gif
-        function  CutFromGif()
+        function  CutFromGif(filename_gif)
             fprintf('handle gif files\n');
-            filename = '1.gif';
+            %                 filename = '1.gif';
+            filename =  filename_gif;
             [gifIn] = imread(filename);
             size_gif = size(gifIn);
             pics = size_gif(end);
@@ -30,70 +31,80 @@ classdef GifMake
     methods (Static)
         function HanldeStatu = CutFromVideo(gifname)
             HanldeStatu = false;
+            %% load video
             close all;
             if false
                 [file,path] = uigetfile('C:\Users\10520\Desktop\*.mp4;*.avi}');
             else
-                file = '20200625_132148.mp4';
+                file = 'Pics\oriv.mp4';
                 path = pwd;
             end
-            %
             fprintf('create video obj from %s\n',fullfile(path,file))
-            % check frames
+            
+            
+            %% check frames
             if true && false
                 implay(fullfile(path,file));
             end
+            
             if ~iscell(file)
                 vobj = VideoReader(fullfile(path,file));
             end
-            vobj_f = read(vobj,[137,197]);
+            vobj.hasFrame()
+            hasFrame(vobj)
+            %vobj_f = read(vobj,[137,197]);
             
-            % transfer video frame to figure frame
-            axes_frame = axes;
-            axes_frame.Visible = 'off';
-            size_frame = size(vobj_f);
+            %% transfer video frame to figure frame
+            video2pic = 1;
             im = cell(0);
-            for i=1:1:size_frame(end)
-                image(vobj_f(:,:,:,i),'Parent',axes_frame);
-                im{i} =  frame2im(getframe(gca));
+            switch video2pic
+                case 1
+                    pic_cnt = 1;
+                    while hasFrame(vobj) && pic_cnt < 1e4
+                        curFrame = readFrame(vobj);
+                        pic_file = strcat('pictemp\',num2str(pic_cnt),'.jpg');
+                        rect = [91,330,260,260];
+                        curFrame = imcrop(curFrame,rect);
+                        imwrite(curFrame,pic_file);
+                        im{pic_cnt} = curFrame;
+                        pic_cnt = pic_cnt + 1;
+                    end
+                otherwise
+                    fprintf('nothing to do\n');
             end
-            fprintf('transfer to figure frame finieshed\n')
-            % wirte to gif file
+            return
+            %% wirte to gif file
             if contains(gifname,'.gif')
                 gif_file = gifname;
             else
-                gif_file = strcat(datetime('now','format','HHmmSS'),'.gif');
+                gif_file = strcat(char(datetime('now','format','HHmmSS')),'.gif');
             end
-            gap = 1;
-            for j = 1:gap:length(im)+10
+            gap = 50;
+            for j = 1:1:length(im)
                 if j==1
                     [A,map] = rgb2ind(im{j},256);
                     imwrite(A,map,gif_file,'LoopCount',...
-                        inf,'DelayTime',gap/vobj.FrameRate);
-                elseif j < length(im) - 5
+                        inf,'DelayTime',gap*0.001);
+                elseif j < length(im) - 1
                     [A,map] = rgb2ind(im{j},256);
                     imwrite(A,map,gif_file,'WriteMode',...
-                        'append','DelayTime',gap/vobj.FrameRate);
-                elseif j <= length(im)
-                    [A,map] = rgb2ind(im{j},256);
-                    imwrite(A,map,gif_file,'WriteMode',...
-                        'append','DelayTime',gap/vobj.FrameRate);
+                        'append','DelayTime',gap*0.001);
                 else
-                    [A,map] = imread('2001w.jpg');
-                    [A,map] = rgb2ind(A,256);
+                    [A,map] = rgb2ind(im{j},256);
                     imwrite(A,map,gif_file,'WriteMode',...
-                        'append','DelayTime',gap/vobj.FrameRate);
+                        'append');
                 end
             end
             fprintf('from video:%s to gif:%s finished\n',file,gif_file);
-%             imshow(gif_file);
-%             saveflag = input(strcat('delete gif_file ?'));
-%             if 
-%                 delete(gif_file);
-%             end
+            %             imshow(gif_file);
+            %             saveflag = input(strcat('delete gif_file ?'));
+            %             if
+            %                 delete(gif_file);
+            %             end
         end
     end
     
+    %% scale figure
     methods (Static)
         % Bilinear Function
         function [ output_img ] = scale( input_img, Size )
@@ -123,10 +134,79 @@ classdef GifMake
                 end
             end
             output_img = uint8(output_img);
-%             figure,imshow(input_img)
-%             axis on
-%             figure,imshow(output_img)
-%             axis on
+            %             figure,imshow(input_img)
+            %             axis on
+            %             figure,imshow(output_img)
+            %             axis on
+        end
+    end
+    
+    
+    %% grid pictures
+    methods (Static)
+        function GridPictue(pic)
+            % [filepath,name,ext] = fileparts(pic);
+            [A,map] = imread(pic);
+            imshow(A)
+        end
+    end
+    
+    methods (Static)
+        function ConpositeGif(gifname,varnargin)
+            if varnargin > 0
+                [files,path] = uigetfile('*.png;*.jpg','MultiSelect','on');
+            else
+                [files,path] = uigetfile('C:\Users\10520\Desktop\huashou\*.png;*.jpg',...
+                    'MultiSelect','on');
+            end
+            if isempty(files)
+                cprintf('comment','no files selected\n');
+                return;
+            end
+            %%
+            imgs = cell(0);
+            %             files_path = strings(0);
+            for i=1:1:length(files)
+                A = imread(fullfile(path,files{i}));
+                tcf('show-img');
+                figure('name','show-img');
+                %imshow(A);
+                %pause(0.5);
+                imgs{i} = A;
+            end
+            tcf();
+            %% write gif file
+            gif_file = strcat(gifname,'.gif');
+            gaps = 100;
+            Lovinu = ["我爱你","无畏人海的拥挤","用尽余生的勇气",...
+                "只为能靠近你","哪怕一厘米","爱上你",...
+                "是我落下的险棋","不惧岁月的更替","往后的朝夕"];
+            
+            text_index = 1;
+            
+            for i = 1:1:length(imgs)
+                if isequal(i,1)
+                    curA = imgs{i};
+                    [curA,map] = rgb2ind(curA,256);
+                    imwrite(curA,map,gif_file,'LoopCount',inf,...
+                        'DelayTime',gaps*1e-3);
+                else
+                    curA = imgs{i};
+                    % compute text index
+                    if (mod(i,int32(length(imgs)/length(Lovinu)))==0)
+                        text_index = text_index + 1;
+                    end
+                    curA = insertText(curA,[200 300],char(Lovinu(text_index)),'FontSize',100,...
+                        'Font','SimSun','TextColor',[189,32,32],...
+                        'AnchorPoint','LeftBottom',...
+                        'BoxColor',[0.94,0.92,0.92],'BoxOpacity',0.0);
+                    
+                    [curA,map] = rgb2ind(curA,256);
+                    imwrite(curA,map,gif_file,'WriteMode','append',...
+                        'DelayTime',gaps*1e-3);
+                end
+            end
+            cprintf('comment','write file finished\n');
         end
     end
 end
