@@ -1,21 +1,21 @@
-%% ger
-text = '';
-source= 'H:\MatlabFiles\Blocks\WallPaperHandle\Pics\netmusic-3.jpg';
-target = 'H:\MatlabFiles\Blocks\WallPaperHandle\Pics\2-1.jpg';
-result='H:\MatlabFiles\Blocks\WallPaperHandle\Pics\netfuss.jpg';
-% I1 = imread(source);           % SOURCE IMAGE
-% I2 = imread(target);           % DESTINATION IMAGE
-% PIE_Gui(I1,I2,result,1,0);
-
-%% 
+%% ger ÊÇ¶Ì·¢
 clc;
-A = imread(source);
+source= './Pics/netmusic-1.jpg';
+target = './Pics/2-1.jpg';
+result='./Pics/netfuss.jpg';
+% 19.1
+clc;
+[A,map] = imread(source);
 B = imread(target);
-% B = B(1:size(A,1),1:size(A,2),:);
-c = imadd(A,B,'uint8');
+A = imresize(A,[size(B,1) size(B,2)]);
+c = imadd(A,rgb2gray(B),'uint8');
 tcf('hha')
 figure('name','hha')
-% imshow(rgb2gray(A))
-imshow(c)
+subplot(311)
+imshow(A)
+subplot(312)
+imshow(B)
+subplot(313)
+imshow(ind2rgb(c))
 return 
 ColorReverse(source);

@@ -17,8 +17,8 @@ function PIE_Gui(I1, I2,FileName,Method,Color)
 % -------------------  SELECT SOURCE ROI ------------------
 %
 disp('USAGE: select a polygon region by using left mouse clicks to draw the vertices');
-disp('       right nouse click to finish - you can then drag the selected region around.');
-disp('       When you have it where you want it, double click left to cut it and paste to the next image.');
+disp('right nouse click to finish - you can then drag the selected region around.');
+disp('When you have it where you want it, double click left to cut it and paste to the next image.');
 h = figure('MenuBar', 'none', 'Toolbar', 'none');  % open window
 [BW, xi, yi] = roipoly(I1);                         % this returns a binary image with white (1) in the mask
 % extract mask (crop image)
@@ -31,6 +31,7 @@ Mc = zeros(size(SRC));                       % make a copy of Ic
 Mc(:,:,1) = imcrop(BW,[min(c) min(r) maxW maxH]);
 Mc(:,:,2) = imcrop(BW,[min(c) min(r) maxW maxH]);
 Mc(:,:,3) = imcrop(BW,[min(c) min(r) maxW maxH]);
+
 %
 % NOW SELECT PLACE TO PASTE
 %
@@ -43,9 +44,11 @@ set(h,'WindowButtonDownFcn',@myButtonPressDown);
 set(h,'WindowButtonUpFcn',@myButtonPressUp);
 set(h, 'WindowButtonMotionFcn', @myMouseMotion);
 set(h, 'KeyPressFcn', @myKeyPress);
+set(h,'WindowScrollWheelFcn',@myWindowSroll);
 myData.xi = xi-min(xi);
 myData.yi = yi-min(yi);
 myData.SRC = SRC;
+myData.zoom = 1;
 myData.DEST = I2;
 myData.Mc=Mc;
 myData.pressDown = 0;
@@ -56,7 +59,8 @@ myData.Method=Method;
 myData.Color=Color;
 myData.FileName=FileName;
 set(h, 'UserData', myData);
-return
+end
+
 %%
 % When button is pressed, call this function
 %
@@ -71,7 +75,8 @@ myData.curY = curY;
 set(myData.line,'XData', myData.xi+curX, 'YData', myData.yi+curY);
 % Save the myData variable back to the object
 set(obj, 'UserData', myData);
-return
+end
+
 %%
 % When button is released, call this function
 %
@@ -79,7 +84,8 @@ function myButtonPressUp(obj,event_obj)
 myData = get(obj, 'UserData');  % get the user data
 myData.pressDown = 0;           % set mouse press to be false
 set(obj, 'UserData', myData);   % set the uer data (i.e. record mouse is not longer being pressed)
-return
+end
+
 %%
 % Called anytime the mouse is moved
 %
@@ -94,7 +100,8 @@ if (myData.pressDown == 1)              % we are only interested if the mouse is
     myData.curY = curY;
     set(obj, 'UserData', myData);
 end
-return
+end
+
 %%
 % Call when key any pressed any key
 %
@@ -124,6 +131,14 @@ if (myData.pressDown == 0)          % if mouse is not pressed
     %
     DEST = myData.DEST;
     SRC = myData.SRC;
+    if false
+        McTemp = myData.Mc;
+        myData.Mc = imresize(McTemp,myData.zoom);
+        Mc = zeros(size(SRC));                       % make a copy of Ic
+        Mc(:,:,1) = imcrop(BW,[min(c) min(r) maxW maxH]);
+        Mc(:,:,2) = imcrop(BW,[min(c) min(r) maxW maxH]);
+        Mc(:,:,3) = imcrop(BW,[min(c) min(r) maxW maxH]);        
+    end
     tx = round(myData.curX);
     ty = round(myData.curY);
     
@@ -137,7 +152,7 @@ if (myData.pressDown == 0)          % if mouse is not pressed
     %         SImage( ty:(ty+hh-1), tx:(tx+ww-1), 1 ) =  SRC(:,:,1);
     %         SImage( ty:(ty+hh-1), tx:(tx+ww-1), 2 ) =  SRC(:,:,2);
     %         SImage( ty:(ty+hh-1), tx:(tx+ww-1), 3 ) =  SRC(:,:,3);
-    
+
     
     Mc = rgb2gray(myData.Mc);
     Mc(1,:)=0;
@@ -145,11 +160,11 @@ if (myData.pressDown == 0)          % if mouse is not pressed
     Mc(:,1)=0;
     Mc(:,end)=0;
     se = strel('disk',5);
-    Mc = imerode( Mc,se);
+    Mc = imerode(Mc,se);
     % Call the PIE function.  It will returned the integrated image
     %---debugline
     a = tic;
-    newI = PIE( TRG,SRC,Mc,myData.Method,myData.Color);
+    newI = PIE(TRG,SRC,Mc,myData.Method,myData.Color);
     toc(a);
     %reconstruct
     if size(newI,3)==1
@@ -164,4 +179,33 @@ if (myData.pressDown == 0)          % if mouse is not pressed
     imshow(DEST);
     imwrite(DEST,myData.FileName);
 end
-return
+end
+
+%%
+% window scroll wheel zoom
+%
+function myWindowSroll(obj, event_obj)
+myData = get(obj,'UserData');
+% modify room
+% maxzoom = min(size(myData.SRC,1)/size(myData.))
+if event_obj.VerticalScrollCount > 0
+    if myData.zoom > 20
+        myData.zoom = 20;
+    else
+        myData.zoom = myData.zoom+0.1;
+    end
+else
+    myData.zoom = myData.zoom  - 0.1;
+    if myData.zoom < 0.1
+        myData.zoom = 0.1;
+    end
+end
+disp(myData.zoom)
+% resize image data
+
+set(myData.line,'XData', myData.xi*myData.zoom + myData.curX,...
+    'YData', myData.yi*myData.zoom + myData.curY);
+
+% set object
+set(obj, 'UserData', myData);
+end
